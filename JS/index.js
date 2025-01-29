@@ -218,23 +218,45 @@ function processCommand(commandString = "") {
                     input.value = "";
                     return false;
                 }
-                controller = new TicTacToe("Asura", "Test");
+                controller = new TicTacToe("Player1", "Player2");
                 toConsole(commandString, false);
                 output.innerHTML += `<br><span class="terminalTitle">TicTacToe</span><br>${controller.printBoard()}`;
                 inGame = true;
                 currentGame = "TicTacToe";
                 // Explain rules
-                output.innerHTML += `<br>The rules are simple get three in a row either vertically or diagnolly. When it is your turn enter a number (1-9) corresponding to a spot on the board.<br><br> ${controller.currentTurn.name}\'s turn:`;
+                output.innerHTML += `<br>The rules are simple get three in a row either vertically or horizontally. When it is your turn enter a number (1-9) corresponding to a spot on the board.<br><br> ${controller.currentTurn.name}\'s turn:`;
                 scrollToBottom();
-                console.log(controller.checkForWin(controller.player2));
             } else if (command === "Connect4.out") {
-
+                if (inGame === true) {
+                    toConsole(`It is currently ${controller.currentTurn.name}\'s turn. You can quit by using exit`, true);
+                    input.value = "";
+                    return false;
+                }
+                controller = new Connect4("Player1", "Player2");
+                toConsole(commandString, false);
+                output.innerHTML += `<br><span class="terminalTitle">Connect4</span><br>${controller.printBoard()}`;
+                inGame = true;
+                currentGame = "Connect4";
+                // Explain rules
+                output.innerHTML += `<br>The rules are simple get four in a row either vertically, horizontally, or diagnolly. When it is your turn enter a number (1-7) corresponding to a column (vertical line) on the board.<br><br> ${controller.currentTurn.name}\'s turn:`;
+                scrollToBottom();
             } else if (command === "MatchMemory.out") {
 
             } else if (currentGame === "TicTacToe") {
                 const num = parseInt(commandString) - 1;
+                if (num > 8 || num < 0) {
+                    toConsole(`Invalid input.`, true);
+                    input.value = "";
+                    return false;
+                }
                 const col = num % 3;
                 const row = Math.floor(num / 3);
+                // Check if spot taken already
+                if (controller.board[row][col] === controller.player1.symbol || controller.board[row][col] === controller.player2.symbol) {
+                    toConsole(`That spot is already taken.`, true);
+                    input.value = "";
+                    return false;
+                }
                 const oldTurnPlayer = controller.setSpace(col, row, controller.currentTurn);
                 output.innerHTML += `<br>${controller.printBoard()}`;
                 if (controller.checkForWin(oldTurnPlayer)) {
@@ -247,6 +269,42 @@ function processCommand(commandString = "") {
                     return;
                 }
                 if (controller.turnCount === 9) {
+                    output.innerHTML += `It ended in a tie!`;
+                    inGame = false;
+                    currentGame = "";
+                    controller = null;
+                    scrollToBottom();
+                    input.value = "";
+                    return;
+                }
+                output.innerHTML += `${controller.currentTurn.name}\'s turn:`;
+                scrollToBottom();
+            } else if (currentGame === "Connect4") {
+                const num = parseInt(commandString) - 1;
+                if (num > 6 || num < 0) {
+                    toConsole(`Invalid input.`, true);
+                    input.value = "";
+                    return false;
+                }
+                const col = num;
+                const row = Math.floor(num / 3);
+                if (controller.board[0][col] === controller.player1.symbol || controller.board[0][col] === controller.player2.symbol) {
+                    toConsole(`This column is full.`, true);
+                    input.value = "";
+                    return false;
+                }
+                const oldTurnPlayer = controller.setSpace(col, controller.currentTurn);
+                output.innerHTML += `<br>${controller.printBoard()}`;
+                if (controller.checkForWin(oldTurnPlayer)) {
+                    output.innerHTML += `${oldTurnPlayer.name} has won!`;
+                    inGame = false;
+                    currentGame = "";
+                    controller = null;
+                    scrollToBottom();
+                    input.value = "";
+                    return;
+                }
+                if (controller.turnCount === 42) {
                     output.innerHTML += `It ended in a tie!`;
                     inGame = false;
                     currentGame = "";
@@ -326,40 +384,114 @@ class TicTacToe {
     }
 
     checkForWin(player) {
-        let symCount = 0;
-        // Check for column win
-        for (let col = 0; col < this.board.length; col++) {
-            symCount = 0;
-            for (let row = 0; row < this.board[col].length; row++) {
-                if (this.board[col][row] === player.symbol) {
-                    symCount++;
+        const rows = this.board.length;
+        const cols = this.board[0].length;
+
+        function checkDirection(r, c, dr, dc, board) {
+            for (let i = 1; i < 3; i++) {
+                let nr = r + dr * i;
+                let nc = c + dc * i;
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols || board[nr][nc] !== player.symbol) {
+                    return false;
                 }
-                if (symCount === 3) {
+            }
+            return true;
+        }
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                if (this.board[r][c] !== player.symbol) continue;
+                if (
+                    checkDirection(r, c, 0, 1, this.board) ||  // Horizontal
+                    checkDirection(r, c, 1, 0, this.board) ||  // Vertical
+                    checkDirection(r, c, 1, 1, this.board) ||  // Diagonal (\)
+                    checkDirection(r, c, 1, -1, this.board)   // Diagonal (/)
+                ) {
                     return true;
                 }
             }
         }
-        // Check for row win
-        let itCount = 0;
-        let col = 0;
-        symCount = 0;
-        for (let row = 0; row < this.board[col].length;) {
-            itCount++;
-            if (this.board[col][row] === player.symbol) {
-                symCount++;
-            }
-            if (symCount === 3) {
-                return true;
-            }
-            if (itCount === 3) {
-                row++;
-                itCount = 0;
-                col = 0;
-                symCount = 0;
-            } else {
-                col++;
+        return false;
+    }
+}
+
+class Connect4 {
+    player1 = {
+        score: 0,
+        symbol: "🔴",
+        name: ""
+    };
+    player2 = {
+        score: 0,
+        symbol: "🟢",
+        name: ""
+    }
+    turnCount = 0;
+    board = [
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]
+    ];
+    currentTurn = this.player1;
+    constructor(player1Name, player2Name) {
+        this.player1.name = player1Name;
+        this.player2.name = player2Name;
+    }
+
+    printBoard() {
+        let text = "<br>";
+        text += `┃${this.board.map((v, i) => v.join("┃")).join("┃<br>┃")}┃<br><br>`;
+        return text;
+    }
+
+    setSpace(column, player) {
+        // Set last empty space in column to player symbol
+        for (let row = 0; row < this.board.length; row++) {
+            // Check if row is empty
+            if (this.board[row][column] !== "⚫") {
+                this.board[row - 1][column] = player.symbol;
+                break;
+            } else if (row === this.board.length - 1) {
+                this.board[row][column] = player.symbol;
+                break;
             }
         }
-        return false
+        this.currentTurn = (player == this.player1) ? this.player2 : this.player1;
+        this.turnCount++;
+        return player;
+    }
+
+    checkForWin(player) {
+        const rows = this.board.length;
+        const cols = this.board[0].length;
+
+        function checkDirection(r, c, dr, dc, board) {
+            for (let i = 1; i < 4; i++) {
+                let nr = r + dr * i;
+                let nc = c + dc * i;
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols || board[nr][nc] !== player.symbol) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                if (this.board[r][c] !== player.symbol) continue;
+                if (
+                    checkDirection(r, c, 0, 1, this.board) ||  // Horizontal
+                    checkDirection(r, c, 1, 0, this.board) ||  // Vertical
+                    checkDirection(r, c, 1, 1, this.board) ||  // Diagonal (")
+                    checkDirection(r, c, 1, -1, this.board)   // Diagonal (/)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
