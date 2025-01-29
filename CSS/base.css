@@ -1,0 +1,90 @@
+:root {
+    --siueRed: #ef3829;
+    --siueLightBrown: #cfaa7a;
+    --siueBrown: #a68462;
+    --siueDarkBrown1: #896532;
+    --siueDarkBrown2: #5a471c;
+    --gray: #212121;
+    --darkGray: #0d0d0d;
+    --green: #1ec700;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    outline: 0px;
+    font-family: monospace;
+}
+
+::-webkit-scrollbar {
+    background-color: #00000000;
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--siueRed);
+    border-radius: 5px;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: black;
+}
+
+.logo {
+    position: relative;
+    height: 5%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* border: 2px solid red; */
+}
+
+.logo-image {
+    position: relative;
+    height: 80%;
+    margin-left: 1%;
+}
+
+.terminalDir {
+    color: blue;
+}
+
+.terminalExec {
+    color: green;
+}
+
+.terminalLink {
+    color: cyan;
+}
+
+.terminalDevice {
+    color: yellow;
+    background-color: black;
+}
+
+.terminalImage {
+    color: magenta;
+}
+
+.terminalArch {
+    color: red;
+}
+
+p {
+    font-size: 15px;
+    cursor: default;
+}
+
+.terminalUser {
+    color: var(--green);
+}
+
+.errorMessage {
+    color: red;
+}

@@ -1,47 +1,107 @@
 :root {
     --siueRed: #ef3829;
-    --siueWhite: #ffffff;
     --siueLightBrown: #cfaa7a;
     --siueBrown: #a68462;
     --siueDarkBrown1: #896532;
     --siueDarkBrown2: #5a471c;
-    --siueBlack: #000000;
-    --darkGray: #303030;
+    --gray: #212121;
+    --darkGray: #0d0d0d;
+    --green: #1ec700;
 }
 
-* {
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
-    outline: 0px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-::-webkit-scrollbar {
-    background-color: #00000000;
-    width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: var(--siue);
-    border-radius: 5px;
-}
-
-body {
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: var(--darkGray);
-}
-
-.header {
+.terminal {
     position: relative;
-    height: 50px;
-    width: 100%;
+    background: var(--darkGray);
+    border: 2px solid var(--gray);
+    height: 50%;
+    width: 80%;
+    margin-top: 5%;
+    margin-left: 10%;
+    border-radius: 10px;
+}
+
+.terminal-header {
+    position: relative;
+    height: 7%;
+    /* border: 2px solid red; */
     display: flex;
     flex-direction: row;
+    gap: 1%;
+    background-color: var(--gray);
+}
+
+.terminal-header-location {
+    position: relative;
+    margin-left: 2%;
+    height: 100%;
+    width: min-content;
+    background-color: var(--darkGray);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: 2px solid blue; */
+}
+
+.terminal-header-location-text {
+    position: relative;
+    color: var(--green);
+    height: min-content;
+    /* border: 2px solid blue; */
+}
+
+.terminal-output {
+    position: relative;
+    width: 98%;
+    height: 85%;
+    color: white;
+    padding-top: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* border: 2px solid blue; */
+}
+
+.terminal-input {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 1%;
+    height: 7%;
+    width: 100%;
     align-items: center;
-    background-color: var(--siueBrown);
-    /* border: 2px solid red; */
+    padding-left: 1%;
+    padding-right: 1%;
+    /* border: 2px solid blue; */
+}
+
+.terminal-input-label {
+    color: var(--green);
+}
+
+@keyframes leftBorderBlink {
+    0% {
+        border-left: 2px solid white;
+    }
+
+    50% {
+        border-left: 2px solid #00000000;
+    }
+
+    100% {
+        border-left: 2px solid white;
+    }
+}
+
+.terminal-input-input {
+    position: relative;
+    height: 100%;
+    width: 75%;
+    background-color: #00000000;
+    color: white;
+    /* animation: leftBorderBlink 2s linear infinite; */
 }
