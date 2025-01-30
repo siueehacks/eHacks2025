@@ -1,14 +1,14 @@
-// // Disable right-click (context menu)
-// document.addEventListener('contextmenu', function (event) {
-//     event.preventDefault();
-// });
+// Disable right-click (context menu)
+document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+});
 
-// // Disable F12 key (Developer Tools)
-// document.addEventListener('keydown', function (event) {
-//     if (event.key === 'F12' || event.key === 'I' && event.ctrlKey) {
-//         event.preventDefault();
-//     }
-// });
+// Disable F12 key (Developer Tools)
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'F12' || event.key === 'I' && event.ctrlKey) {
+        event.preventDefault();
+    }
+});
 
 // const validCommands = ["cd", "ls", "help", "clear"];
 const validCommands = [
@@ -241,7 +241,19 @@ function processCommand(commandString = "") {
                 output.innerHTML += `<br>The rules are simple get four in a row either vertically, horizontally, or diagnolly. When it is your turn enter a number (1-7) corresponding to a column (vertical line) on the board.<br><br> ${controller.currentTurn.name}\'s turn:`;
                 scrollToBottom();
             } else if (command === "MatchMemory.out") {
-
+                if (inGame === true) {
+                    toConsole(`It is currently ${controller.currentTurn.name}\'s turn. You can quit by using exit`, true);
+                    input.value = "";
+                    return false;
+                }
+                controller = new MatchMemory("Player1", "Player2");
+                toConsole(commandString, false);
+                output.innerHTML += `<br><span class="terminalTitle">MatchMemory</span><br>${controller.printBoard()}`;
+                inGame = true;
+                currentGame = "MatchMemory";
+                // Explain rules
+                output.innerHTML += `<br>The rules are simple match two cards together and take those cards, the player with the most cards at the end wins. If a player gets more than half of the cards they automatically win. When it is your turn enter a number (1-24) corresponding to a spot on the board.<br><br> ${controller.currentTurn.name}\'s turn:`;
+                scrollToBottom();
             } else if (currentGame === "TicTacToe") {
                 const num = parseInt(commandString) - 1;
                 if (num > 8 || num < 0) {
@@ -305,6 +317,43 @@ function processCommand(commandString = "") {
                     return;
                 }
                 if (controller.turnCount === 42) {
+                    output.innerHTML += `It ended in a tie!`;
+                    inGame = false;
+                    currentGame = "";
+                    controller = null;
+                    scrollToBottom();
+                    input.value = "";
+                    return;
+                }
+                output.innerHTML += `${controller.currentTurn.name}\'s turn:`;
+                scrollToBottom();
+            } else if (currentGame === "MatchMemory") {
+                const num = parseInt(commandString) - 1;
+                if (num > 23 || num < 0) {
+                    toConsole(`Invalid input.`, true);
+                    input.value = "";
+                    return false;
+                }
+                const col = num % 3;
+                const row = Math.floor(num / 3);
+                // Check if spot taken already
+                if (controller.publicBoard[row][col] === "⬛⬛") {
+                    toConsole(`There is no card in that spot.`, true);
+                    input.value = "";
+                    return false;
+                }
+                const oldTurnPlayer = controller.checkCard(col, row, controller.currentTurn);
+                output.innerHTML += `<br>${controller.printBoard()}`;
+                if (controller.checkForWin(oldTurnPlayer)) {
+                    output.innerHTML += `${oldTurnPlayer.name} has won!`;
+                    inGame = false;
+                    currentGame = "";
+                    controller = null;
+                    scrollToBottom();
+                    input.value = "";
+                    return;
+                }
+                if (controller.turnCount === 9) {
                     output.innerHTML += `It ended in a tie!`;
                     inGame = false;
                     currentGame = "";
@@ -495,3 +544,93 @@ class Connect4 {
         return false;
     }
 }
+
+class MatchMemory {
+    player1 = {
+        score: 0,
+        name: ""
+    };
+    player2 = {
+        score: 0,
+        name: ""
+    };
+    cardHeld = null;
+    possibleCards = ["✨", "✨", "🎈", "🎈", "🎉", "🎉", "🎃", "🎃", "🎭", "🎭", "🛒", "🛒", "🦺", "🦺", "✈️", "✈️", "🛸", "🛸", "🍑", "🍑", "🍆", "🍆", "⚛️", "⚛️"]
+    publicBoard = [
+        ["0️⃣1️⃣", "0️⃣2️⃣", "0️⃣3️⃣", "0️⃣4️⃣", "0️⃣5️⃣", "0️⃣6️⃣"],
+        ["0️⃣7️⃣", "0️⃣8️⃣", "0️⃣9️⃣", "1️⃣0️⃣", "1️⃣1️⃣", "1️⃣2️⃣"],
+        ["1️⃣3️⃣", "1️⃣4️⃣", "1️⃣5️⃣", "1️⃣6️⃣", "1️⃣7️⃣", "1️⃣8️⃣"],
+        ["1️⃣9️⃣", "2️⃣0️⃣", "2️⃣1️⃣", "2️⃣2️⃣", "2️⃣3️⃣", "2️⃣4️⃣"]
+    ];
+    hiddenBoard = [
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]
+    ];
+    currentTurn = this.player1;
+    constructor(player1Name, player2Name) {
+        this.possibleCards = ["✨", "✨", "🎈", "🎈", "🎉", "🎉", "🎃", "🎃", "🎭", "🎭", "🛒", "🛒", "🦺", "🦺", "✈️", "✈️", "🛸", "🛸", "🍑", "🍑", "🍆", "🍆", "⚛️", "⚛️"]
+        this.player1.name = player1Name;
+        this.player2.name = player2Name;
+        for (let row = 0; row < this.hiddenBoard.length; row++) {
+            for (let col = 0; col < this.hiddenBoard[row].length; col++) {
+                let randomNum = getRandomInt(0, this.possibleCards.length - 1);
+                this.hiddenBoard[row][col] = this.possibleCards[randomNum];
+                this.possibleCards.splice(randomNum, 1);
+            }
+        }
+        console.log(this.hiddenBoard);
+    }
+
+    printBoard() {
+        let text = "<br>";
+        text += `┃${this.publicBoard.map((v, i) => v.join("┃")).join("┃<br><br>┃")}┃<br><br>`;
+        // text += `┃${this.hiddenBoard.map((v, i) => v.join("┃")).join("┃<br>┃")}┃<br><br>`;
+        return text;
+    }
+
+    checkCard(row, column, player) {
+        // Check if card is held
+        if (this.cardHeld !== null) {
+            // Compare card held to other card
+            if (this.cardHeld === this.hiddenBoard[row][column]) {
+                // Remove held card
+                this.hiddenBoard[this.cardHeld.row].splice([this.cardHeld.column], 1);
+                // Remove second card
+                this.hiddenBoard[row].splice([column], 1);
+                // Increase player score by 2
+                player.score += 2;
+                this.currentTurn = (player == this.player1) ? this.player2 : this.player1;
+                this.cardHeld = null
+            }
+        } else {
+            // Store card in hand
+            this.cardHeld = {
+                name: this.hiddenBoard[row][column],
+                column: column,
+                row: row
+            };
+            // Show card in public board
+            this.publicBoard[row][column] = `⬛${this.hiddenBoard[row][column]}`;
+        }
+        return player;
+    }
+
+    checkForWin(player) {
+        let count = 0;
+        for (let row of this.hiddenBoard) {
+            for (let col of row) {
+
+            }
+        }
+        if (this.hiddenBoard)
+            if (player.score > 12 || (player === this.player1) ? player > this.player2.score : player > this.player1.score) {
+                return true;
+            }
+    }
+}
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
