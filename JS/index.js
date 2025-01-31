@@ -1,14 +1,14 @@
-// Disable right-click (context menu)
-document.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-});
+// // Disable right-click (context menu)
+// document.addEventListener('contextmenu', function (event) {
+//     event.preventDefault();
+// });
 
-// Disable F12 key (Developer Tools)
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.key === 'I' && event.ctrlKey) {
-        event.preventDefault();
-    }
-});
+// // Disable F12 key (Developer Tools)
+// document.addEventListener('keydown', function (event) {
+//     if (event.key === 'F12' || event.key === 'I' && event.ctrlKey) {
+//         event.preventDefault();
+//     }
+// });
 
 // const validCommands = ["cd", "ls", "help", "clear"];
 const validCommands = [
@@ -555,6 +555,7 @@ class MatchMemory {
         name: ""
     };
     cardHeld = null;
+    placeHolder = null;
     possibleCards = ["✨", "✨", "🎈", "🎈", "🎉", "🎉", "🎃", "🎃", "🎭", "🎭", "🛒", "🛒", "🦺", "🦺", "✈️", "✈️", "🛸", "🛸", "🍑", "🍑", "🍆", "🍆", "⚛️", "⚛️"]
     publicBoard = [
         ["0️⃣1️⃣", "0️⃣2️⃣", "0️⃣3️⃣", "0️⃣4️⃣", "0️⃣5️⃣", "0️⃣6️⃣"],
@@ -601,9 +602,14 @@ class MatchMemory {
                 this.hiddenBoard[row].splice([column], 1);
                 // Increase player score by 2
                 player.score += 2;
-                this.currentTurn = (player == this.player1) ? this.player2 : this.player1;
                 this.cardHeld = null
+            } else {
+                // Hide card and remove card held
+                this.publicBoard[row][column] = this.placeHolder;
+                this.placeHolder = null;
+                this.cardHeld = null;
             }
+            this.currentTurn = (player == this.player1) ? this.player2 : this.player1;
         } else {
             // Store card in hand
             this.cardHeld = {
@@ -612,6 +618,7 @@ class MatchMemory {
                 row: row
             };
             // Show card in public board
+            this.placeHolder = this.publicBoard[row][column];
             this.publicBoard[row][column] = `⬛${this.hiddenBoard[row][column]}`;
         }
         return player;

@@ -26,6 +26,7 @@
 .terminal-header {
     position: relative;
     height: 7%;
+    width: 100%;
     /* border: 2px solid red; */
     display: flex;
     flex-direction: row;
@@ -116,4 +117,11 @@
     width: 98%;
     height: 100%;
     /* border: 2px solid red; */
+}
+
+@media screen and (max-width: 880px) {
+    .terminal {
+        width: 95%;
+        margin-left: 2.5%;
+    }
 }
