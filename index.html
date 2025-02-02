@@ -7,13 +7,44 @@
     <title>eHacks 2025</title>
     <link rel="stylesheet" href="./CSS/base.css">
     <link rel="stylesheet" href="./CSS/index.css">
+    <script src="./JS/functions.js"></script>
     <script src="./JS/index.js" type="module"></script>
 </head>
 
-<body>
-    <div class="logo">
-        <img src="./Media/eHacksLogo.png" class="logo-image" alt="eHacks logo">
+<body id="body">
+    <canvas class='hacker-3d-shiz'></canvas>
+    <canvas class='bars-and-stuff'></canvas>
+    <div class="output-console"></div>
+    <div class="logo-1" id="logo-1">
+        <img src="./Media/eHacksLogo.png" class="logo-image" id="logo-topleft" alt="eHacks logo">
     </div>
+    <div class="logo-2" id="logo-2">
+        <img src="./Media/eHacksLogo.png" class="logo-image" id="logo-topright" alt="eHacks logo">
+    </div>
+    <div class="logo-3" id="logo-3">
+        <img src="./Media/eHacksLogo.png" class="logo-image" id="logo-bottomleft" alt="eHacks logo">
+    </div>
+    <div class="logo-4" id="logo-4">
+        <img src="./Media/eHacksLogo.png" class="logo-image" id="logo-bottomright" alt="eHacks logo">
+    </div>
+    <section class="attentionGetter">
+        <h1 class="attentionGetter-heading">Object Computing Inc Presents<br><span class="glowtext">eHacks
+                2025</span></h1>
+        <p class="attentionGetter-info">
+            <span class="attentionGetter-info-header">user@eHacks2025:/event $ WHEN; WHERE; BY_WHO</span>
+            <br>
+            <br>
+            March 7th - 9th
+            <br><br>
+
+            T-Rex Innovation Center, St. Louis, MO<br><br>Hosted by
+            Southern Illinois University Edwardsville
+        </p>
+        <button class="attentionGetter-button button" id="register-button"
+            onclick="goToPage('./register.html')">Register</button>
+    </section>
+    <h2 class="terminal-heading">Easter eggs?... Yeah we got them, can you find them and when a prize by the end of the
+        event?</h2>
     <section class="terminal">
         <section class="terminal-header">
             <div class="terminal-header-location">
@@ -34,6 +65,116 @@
             <input class="terminal-input-input" id="terminal-input-input" placeholder="Type here...">
         </div>
     </section>
+    <section class="about">
+        <h2 class="about-header">About</h2>
+        <p class="about-text">
+            eHacks is Southern Illinois University Edwardsville's annual hackathon. It is a 36-hour, weekend long event
+            where
+            participants come together to create innovative projects. eHacks provides a great opportunity for students
+            to learn new
+            skills, network with other students, and have fun! This year, eHacks will take place March 1-3 and will be a
+            fully in
+            person event. Below are some photos from eHacks 2024.
+        </p>
+        <!-- Gallery -->
+        <div class="about-gallery">
+            <!-- Can be either video or image -->
+            <img class="about-gallery-blur" id="about-gallery-blur" src="./Media/ehacks2024-1.jpg"
+                alt="blur for image from eHacks 2024">
+            <img class="about-gallery-content" id="about-gallery-content" src="./Media/ehacks2024-1.jpg"
+                alt="image from eHacks 2024">
+            <div class="about-gallery-dotsContainer">
+                <div class="about-gallery-dot-selected" id="about-gallery-dot-0"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-1"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-2"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-3"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-4"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-5"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-6"></div>
+                <div class="about-gallery-dot" id="about-gallery-dot-7"></div>
+            </div>
+            <div class="about-gallery-arrows">
+                <div class="about-gallery-arrowContainer-left">
+                    <img src="./Media/chevron-down-solid.svg" class="about-gallery-arrow-left"
+                        onclick="changeImage(-1)">
+                </div>
+                <div class="about-gallery-arrowContainer-right">
+                    <img src="./Media/chevron-down-solid.svg" class="about-gallery-arrow-right"
+                        onclick="changeImage(1)">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="sponsors">
+        <h2 class="sponsors-header">Sponsors</h2>
+        <div class="sponsors-podium">
+            <div class="sponsors-podium-gold">
+                <img class="sponsors-podium-image" id="trex-logo" src="./Media/trex-logo.webp"
+                    alt="TRex logo gold sponsor">
+                <div class="sponsors-podium-gold-platform">
+                    <h3 class="sponsors-podium-text">Gold</h3>
+                </div>
+            </div>
+            <div class="sponsors-podium-platinum">
+                <img class="sponsors-podium-image" id="oci-logo" src="./Media/oci-logo.svg"
+                    alt="OCI logo platinum sponsor">
+                <div class="sponsors-podium-platinum-platform">
+                    <h3 class="sponsors-podium-text">Platinum</h3>
+                </div>
+            </div>
+            <div class="sponsors-podium-silver">
+                <img class="sponsors-podium-image" id="an-logo" src="./Media/achitectnow-logo.png"
+                    alt="ArchitectNow logo silver sponsor">
+                <div class="sponsors-podium-silver-platform">
+                    <h3 class="sponsors-podium-text">Silver</h3>
+                </div>
+            </div>
+        </div>
+        <p class="sponsor-extrainfo">
+            Net event proceeds will go to benefit the SIUE Computer Science Development Fund<br><br>
+            Want to sponsor eHacks? Check out our <a class="sponsor-extrainfo-link"
+                onclick="goToPage('./be-a-sponsor.html')">Be a Sponsor page!<img src="./Media/link-solid.svg"
+                    class="sponsor-extrainfo-link-image" alt="be a sponsor page link"></a>
+        </p>
+    </section>
+    <section class="schedule">
+        <h2 class="schedule-header">Schedule</h2>
+        <ul class="schedule-list" id="schedule-list"></ul>
+    </section>
+    <section class="faq">
+        <h3 class="faq-header">FAQ</h3>
+        <ul class="faq-list" id="faq-list"></ul>
+    </section>
+    <section class="contactUs">
+        <h2 class="contactUs-header">Contact Us</h2>
+        <a class="contactUs-link" href="mailto:siue.ehacks@gmail.com">siue.ehacks@gmail.com<img
+                src="./Media/link-solid.svg" class="contactUs-link-image" alt="email to siue.ehacks@gmail.com"></a>
+    </section>
+    <section class="footer">
+        <p class="footer-text">Made by eHacks volunteers and alumni</p>
+    </section>
+    <div class="redemption-box" id="redemption-box">
+        <p class="redemption-box-header">Secret Code</p>
+        <input class="redemption-box-input" id="redemption-box-input" maxlength="6">
+        <button class="redemption-box-button" id="redemption-box-button">Redeem</button>
+    </div>
+    <div class="name-box" id="name-box">
+        <p class="name-box-header">Your Name</p>
+        <input class="name-box-input" id="name-box-input">
+        <button class="name-box-button" id="name-box-button">Submit</button>
+    </div>
+    <p class="code-2" id="code-2"></p>
+    <p class="code-3" id="code-3-0">1</p>
+    <p class="code-3" id="code-3-1">2</p>
+    <p class="code-3" id="code-3-2">3</p>
+    <p class="code-3" id="code-3-3">4</p>
+    <p class="code-3" id="code-3-4">5</p>
+    <p class="code-3" id="code-3-5">6</p>
+    <div class="error" id="error">
+        <div class="error-popup" id="error-popup">
+            <p class="error-popup-text" id="error-popup-text">This is an error message</p>
+        </div>
+    </div>
 </body>
 
 </html>

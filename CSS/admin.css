@@ -1,0 +1,264 @@
+:root {
+    --siueRed: #ef3829;
+    --siueLightBrown: #cfaa7a;
+    --siueBrown: #a68462;
+    --siueDarkBrown1: #896532;
+    --siueDarkBrown2: #5a471c;
+    --gray: #212121;
+    --darkGray: #0d0d0d;
+    --green: #1ec700;
+    --offwhite: #e6e6e6;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    background-color: var(--darkGray);
+    display: flex;
+    flex-direction: row;
+}
+
+.header-section {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.header-image {
+    position: relative;
+    height: 80%;
+    margin-left: 2%;
+    filter: invert(72%) sepia(47%) saturate(7406%) hue-rotate(75deg) brightness(150%) contrast(106%);
+}
+
+.header-name {
+    position: relative;
+    color: var(--green);
+    font-size: 25px;
+    margin-left: 2%;
+}
+
+.section-right {
+    position: relative;
+    justify-content: right;
+}
+
+.header-button {
+    position: relative;
+    margin-right: 2%;
+    height: 80%;
+    font-size: 20px;
+}
+
+.header-button:hover {
+    box-shadow: 0px 0px 5px 0px var(--green);
+}
+
+.attendees {
+    position: relative;
+    width: 90%;
+    left: 5%;
+    margin-top: 60px;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    background-color: var(--gray);
+    border-radius: 10px;
+    overflow: hidden;
+    /* border: 2px solid red; */
+}
+
+.attendees-header,
+.shirts-header {
+    position: relative;
+    color: var(--green);
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.table-wrapper {
+    position: relative;
+    width: 100%;
+    height: min-content;
+    overflow: auto;
+}
+
+.table {
+    position: relative;
+    width: min-content;
+    height: min-content;
+    border-collapse: collapse;
+    table-layout: auto;
+    margin-bottom: 2%;
+    /* border: 2px solid blue; */
+}
+
+.table-header {
+    position: relative;
+    width: min-content;
+    height: 30px;
+    display: flexbox;
+    /* border: 2px solid green; */
+}
+
+.table-header th div {
+    color: var(--green);
+    font-size: 15px;
+    width: 100;
+    height: 30px;
+    font-weight: normal;
+    display: flex;
+    flex-direction: row;
+    text-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    white-space: nowrap;
+    border-right: 1px solid var(--offwhite);
+    border-bottom: 1px solid var(--offwhite);
+    cursor: default;
+}
+
+.table-header th:last-child div {
+    border-right: none;
+    /* Remove border from the last header */
+}
+
+.table-header-th-sort {
+    position: relative;
+    height: 15px;
+    margin-left: 5px;
+    filter: invert(100%) sepia(0%) saturate(5819%) hue-rotate(121deg) brightness(120%) contrast(80%);
+}
+
+.table tbody tr td {
+    position: relative;
+    height: 25px;
+    text-wrap: nowrap;
+    color: var(--offwhite);
+    font-size: 15px;
+    text-align: center;
+    border-right: 1px solid var(--offwhite);
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: default;
+    /* border-bottom: 1px solid var(--offwhite); */
+}
+
+.table tbody tr td:last-child {
+    border-right: none;
+    /* Remove border from the last header */
+}
+
+.table tbody tr {
+    background-color: #1a1a1a;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:nth-child(2) {
+    background-color: #2a2a2a;
+}
+
+.table tbody tr td img {
+    position: relative;
+    height: 20px;
+    top: 2.5px;
+}
+
+.greenFilter {
+    filter: invert(72%) sepia(47%) saturate(7406%) hue-rotate(75deg) brightness(150%) contrast(106%);
+}
+
+.redFilter {
+    filter: invert(25%) sepia(84%) saturate(3747%) hue-rotate(351deg) brightness(104%) contrast(87%);
+}
+
+.tablebutton {
+    position: relative;
+    color: var(--green);
+    background-color: #00000000;
+    cursor: pointer;
+}
+
+.shirts {
+    position: relative;
+    width: 50%;
+    left: 25%;
+    margin-top: 20px;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    background-color: var(--gray);
+    border-radius: 10px;
+    overflow: hidden;
+    /* border: 2px solid red; */
+}
+
+.shirt-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shirt-form-div {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: min-content;
+    margin-top: 2%;
+    /* border: 2px solid red; */
+}
+
+.shirt-form-label {
+    position: relative;
+    color: var(--green);
+    font-size: 20px;
+    width: 100px;
+}
+
+.shirt-form-input {
+    position: relative;
+    background-color: var(--darkGray);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--offwhite);
+    text-align: center;
+    overflow: hidden;
+}
+
+.shirt-form-button {
+    position: relative;
+    margin-top: 2%;
+    background-color: var(--darkGray);
+    padding: 1%;
+    font-size: 20px;
+    margin-bottom: 2%;
+    border: 1px solid #00000000;
+}
+
+.shirt-form-button:hover {
+    transform: translate(2.5px, -2.5px);
+    box-shadow: -5px 5px 5px 0px var(--green);
+    border: 1px solid var(--green);
+}
+
+.cover {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0px;
+    background-color: black;
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eHacks 2025 Register</title>
+    <link rel="stylesheet" href="./CSS/base.css">
+    <link rel="stylesheet" href="./CSS/register.css">
+    <script src="./JS/register.js" type="module"></script>
+</head>
+
+<body id="body">
+    <form class="registerForm" id="registerForm">
+        <h1 class="registerForm-header">Register</h1>
+        <p class="registerForm-note">All fields must be filled out in order to complete registration.</p>
+        <label class="registerForm-label" for="email">Email</label>
+        <input class="registerForm-input" name="email" placeholder="example@example.com" id="email" required>
+        <label class="registerForm-label" for="firstName">First Name</label>
+        <input class="registerForm-input" name="firstName" placeholder="Bob" id="firstName" required>
+        <label class="registerForm-label" for="lastName">Last Name</label>
+        <input class="registerForm-input" name="lastName" placeholder="Ross" id="lastName" required>
+        <label class="registerForm-label" for="shirtSize">Shirt Size</label>
+        <select class="registerForm-input" name="shirtSize" id="shirtSize" required>
+            <option value="" disabled selected>Choose a shirt size</option>
+            <option value="1">Small</option>
+            <option value="2">Medium</option>
+            <option value="3">Large</option>
+            <option value="4">XLarge</option>
+            <option value="5">XXLarge</option>
+        </select>
+        <label class="registerForm-label" for="school">School</label>
+        <input class="registerForm-input" name="school" placeholder="SIUE" id="school" required>
+        <label class="registerForm-label" for="schoolYear">School Year</label>
+        <select class="registerForm-input" name="schoolYear" id="schoolYear" required>
+            <option value="" disabled selected>Choose a school year</option>
+            <option value="Freshman">Freshman</option>
+            <option value="Sophomore">Sophomore</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+            <option value="Graduate">Graduate</option>
+        </select>
+        <label class="registerForm-label" for="major">Major</label>
+        <input class="registerForm-input" name="major" placeholder="Computer Science" id="major" required>
+        <label class="registerForm-label" for="needsTransport">Do you need transportation?</label>
+        <select class="registerForm-input" name="needsTransport" id="needsTransport" required>
+            <option value="" disabled selected>Select Yes or No</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+        <label class="registerForm-label" for="">Allergies</label>
+        <div class="registerForm-container">
+            <input type="checkbox" value="1" class="registerForm-checkbox" name="allergies" id="Peanuts">
+            <label class="registerForm-container-label" for="Peanuts">Peanuts</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="2" class="registerForm-checkbox" name="allergies" id="Tree Nuts">
+            <label class="registerForm-container-label" for="Tree Nuts">Tree Nuts</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="3" class="registerForm-checkbox" name="allergies" id="Milk">
+            <label class="registerForm-container-label" for="Milk">Milk</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="4" class="registerForm-checkbox" name="allergies" id="Eggs">
+            <label class="registerForm-container-label" for="Eggs">Eggs</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="5" class="registerForm-checkbox" name="allergies" id="Wheat">
+            <label class="registerForm-container-label" for="Wheat">Wheat</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="6" class="registerForm-checkbox" name="allergies" id="Soy">
+            <label class="registerForm-container-label" for="Soy">Soy</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="7" class="registerForm-checkbox" name="allergies" id="Fish">
+            <label class="registerForm-container-label" for="Fish">Fish</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="8" class="registerForm-checkbox" name="allergies" id="Shellfish">
+            <label class="registerForm-container-label" for="Shellfish">Shellfish</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="9" class="registerForm-checkbox" name="allergies" id="Sesame">
+            <label class="registerForm-container-label" for="Sesame">Sesame</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="10" class="registerForm-checkbox" name="allergies" id="Gluten">
+            <label class="registerForm-container-label" for="Gluten">Gluten</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="11" class="registerForm-checkbox" name="allergies" id="Mustard">
+            <label class="registerForm-container-label" for="Mustard">Mustard</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="12" class="registerForm-checkbox" name="allergies" id="Sulfites">
+            <label class="registerForm-container-label" for="Sulfites">Sulfites</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="13" class="registerForm-checkbox" name="allergies" id="Latex">
+            <label class="registerForm-container-label" for="Latex">Latex</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="14" class="registerForm-checkbox" name="allergies" id="Corn">
+            <label class="registerForm-container-label" for="Corn">Corn</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="15" class="registerForm-checkbox" name="allergies" id="Strawberries">
+            <label class="registerForm-container-label" for="Strawberries">Strawberries</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="16" class="registerForm-checkbox" name="allergies" id="Tomatoes">
+            <label class="registerForm-container-label" for="Tomatoes">Tomatoes</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="17" class="registerForm-checkbox" name="allergies" id="Chocolate">
+            <label class="registerForm-container-label" for="Chocolate">Chocolate</label>
+        </div>
+        <div class="registerForm-container">
+            <input type="checkbox" value="18" class="registerForm-checkbox" name="allergies" id="Other">
+            <label class="registerForm-container-label" for="Other">Other</label>
+        </div>
+        <span class="comment" id="comment-container">
+            <label class="registerForm-label" for="comment">What allergies do you have?</label>
+            <input class="registerForm-input" name="comment" placeholder="N/A" value="" id="comment">
+        </span>
+        <label class="registerForm-label" for="fileupload">Resume Upload</label>
+        <div class="registerForm-filebox" id="registerForm-filebox">
+            <input class="registerForm-filebox-input" name="resume" hidden id="fileupload" type="file"
+                accept=".pdf,.doc,.docx">
+            <p class="registerForm-filebox-text" id="registerForm-filebox-text">Click to upload</p>
+        </div>
+        <button class="registerForm-button button" type="submit">Submit</button>
+    </form>
+    <section class="footer">
+        <p class="footer-text">Made by eHacks volunteers and alumni</p>
+    </section>
+</body>
+
+</html>

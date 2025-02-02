@@ -1,0 +1,146 @@
+:root {
+    --siueRed: #ef3829;
+    --siueLightBrown: #cfaa7a;
+    --siueBrown: #a68462;
+    --siueDarkBrown1: #896532;
+    --siueDarkBrown2: #5a471c;
+    --gray: #212121;
+    --darkGray: #0d0d0d;
+    --green: #1ec700;
+    --offwhite: #e6e6e6;
+}
+
+.registerForm {
+    position: relative;
+    width: 80%;
+    height: min-content;
+    left: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 2%;
+    padding-bottom: 2%;
+    overflow: hidden;
+    /* border: 2px solid red; */
+}
+
+.registerForm-header {
+    position: relative;
+    color: var(--green);
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+    cursor: default;
+}
+
+.registerForm-note {
+    position: relative;
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+    color: var(--offwhite);
+}
+
+.registerForm-label {
+    position: relative;
+    color: var(--green);
+    font-size: 20px;
+    left: 10%;
+    width: 80%;
+    margin-top: 2%;
+    margin-bottom: 0%;
+}
+
+.registerForm-input {
+    position: relative;
+    background-color: var(--gray);
+    width: 80%;
+    left: 10%;
+    height: 40px;
+    color: var(--offwhite);
+    border-radius: 10px;
+    text-indent: 1%;
+    font-size: 15px;
+    transition: all .2s ease-in-out;
+}
+
+.registerForm-input:hover,
+.registerForm-input:focus {
+    color: var(--green);
+    box-shadow: 0px 0px 10px 0px var(--green);
+}
+
+.registerForm-container {
+    position: relative;
+    width: 80%;
+    height: 30px;
+    left: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1%;
+    /* border: 2px solid blue; */
+}
+
+.registerForm-container-label {
+    position: relative;
+    color: var(--green);
+    font-size: 20px;
+    left: 1%;
+    width: 80%;
+}
+
+.comment {
+    position: relative;
+    display: none;
+}
+
+.registerForm-filebox {
+    position: relative;
+    width: min-content;
+    min-width: 25%;
+    padding-left: 1%;
+    padding-right: 1%;
+    height: 40px;
+    left: 10%;
+    background-color: var(--gray);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    border: 1px solid #00000000;
+    /* border: 2px solid blue; */
+}
+
+.registerForm-filebox:hover {
+    transform: translate(2.5px, -2.5px);
+    box-shadow: -5px 5px 5px 0px var(--green);
+    border: 1px solid var(--green);
+}
+
+.registerForm-filebox-text {
+    position: relative;
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+    color: var(--offwhite);
+    cursor: pointer;
+    /* border: 2px solid yellow; */
+}
+
+.registerForm-button {
+    position: relative;
+    width: 50%;
+    height: 30px;
+    left: 25%;
+    margin-top: 2%;
+    font-size: 20px;
+}
+
+.registerForm-button:hover {
+    transform: translate(2.5px, -2.5px);
+    box-shadow: -5px 5px 5px 0px var(--green);
+    border: 1px solid var(--green);
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eHacks Admin Panel</title>
+    <link rel="stylesheet" href="./CSS/base.css">
+    <link rel="stylesheet" href="./CSS/admin.css">
+    <script src="./JS/functions.js"></script>
+    <script src="./JS/admin.js" type="module"></script>
+    <!-- Favicon for standard browsers -->
+    <link rel="icon" type="image/png" href="/Media/ehacksBulb1920GREENNEW_E_1.png">
+
+    <!-- Favicon for Apple devices -->
+    <link rel="apple-touch-icon" href="/Media/ehacksBulb1920GREENNEW_E_1.png">
+
+    <!-- Favicon for older browsers -->
+    <link rel="shortcut icon" href="/Media/ehacksBulb1920GREENNEW_E_1.png">
+</head>
+
+<body id="body">
+    <header class="header">
+        <section class="header-section">
+            <img class="header-image" src="/Media/eHacksLogo.png" alt="eHacks logo">
+            <h3 class="header-name">Admin Panel</h3>
+        </section>
+        <section class="header-section section-right">
+            <button class="header-button button" id="logoutButton">Logout</button>
+        </section>
+    </header>
+    <section class="attendees">
+        <h2 class="attendees-header">Attendees</h2>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead class="table-header">
+                    <th>
+                        <div>
+                            Registered
+                            <!-- <img id="sort-registered" class="table-header-th-sort" src="/Media/sort-solid.svg"
+                                                                        alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            First Name
+                            <!-- <img id="sort-firstName" class="table-header-th-sort" src="/Media/sort-solid.svg"
+                                alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Last Name
+                            <!-- <img id="sort-lastName" class="table-header-th-sort" src="/Media/sort-solid.svg" alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Email
+                            <!-- <img id="sort-email" class="table-header-th-sort" src="/Media/sort-solid.svg" alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Shirt Size
+                            <!-- <img id="sort-shirtSize" class="table-header-th-sort" src="/Media/sort-solid.svg"
+                                alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Resume
+                            <!-- <img id="sort-resume" class="table-header-th-sort" src="/Media/sort-solid.svg" alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            School
+                            <!-- <img id="sort-school" class="table-header-th-sort" src="/Media/sort-solid.svg" alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            School Year
+                            <!-- <img id="sort-schoolYear" class="table-header-th-sort" src="/Media/sort-solid.svg"
+                                alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Major
+                            <!-- <img id="sort-major" class="table-header-th-sort" src="/Media/sort-solid.svg" alt="sort"> -->
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Needs Transport
+                            <!-- <img id="sort-needsTransport" class="table-header-th-sort" src="/Media/sort-solid.svg"
+                                alt="sort"> -->
+                        </div>
+                    </th>
+                </thead>
+                <tbody id="attendees-table">
+                </tbody>
+
+            </table>
+        </div>
+    </section>
+    <section class="shirts">
+        <h2 class="shirts-header">Shirts</h2>
+        <form class="shirt-form" id="shirt-form">
+        </form>
+    </section>
+    <div class="cover" id="cover"></div>
+</body>
+
+</html>

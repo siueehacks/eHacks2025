@@ -1,0 +1,60 @@
+:root {
+    --siueRed: #ef3829;
+    --siueLightBrown: #cfaa7a;
+    --siueBrown: #a68462;
+    --siueDarkBrown1: #896532;
+    --siueDarkBrown2: #5a471c;
+    --gray: #212121;
+    --darkGray: #0d0d0d;
+    --green: #1ec700;
+    --offwhite: #e6e6e6;
+}
+
+table {
+    position: relative;
+    /* border: 2px solid var(--offwhite); */
+    color: var(--offwhite);
+    font-size: 15px;
+    width: 95%;
+    left: 2.5%;
+    margin-top: 5%;
+}
+
+td:first-child {
+    text-align: center;
+}
+
+tr {
+    position: relative;
+    height: 20px;
+}
+
+td {
+    text-align: center;
+    height: 50px;
+    border: 2px solid var(--gray);
+
+}
+
+.greenColor {
+    color: var(--green);
+}
+
+.redColor {
+    color: var(--siueRed);
+}
+
+.back-button {
+    position: relative;
+    width: 20%;
+    left: 40%;
+    margin-top: 2%;
+    height: 30px;
+    border: 1px solid #00000000;
+}
+
+.back-button:hover {
+    transform: translate(2.5px, -2.5px);
+    box-shadow: -5px 5px 5px 0px var(--green);
+    border: 1px solid var(--green);
+}

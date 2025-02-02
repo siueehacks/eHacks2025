@@ -5,12 +5,11 @@
 
 // // Disable F12 key (Developer Tools)
 // document.addEventListener('keydown', function (event) {
-//     if (event.key === 'F12' || event.key === 'I' && event.ctrlKey) {
+//     if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
 //         event.preventDefault();
 //     }
 // });
-
-// const validCommands = ["cd", "ls", "help", "clear"];
+const { apiURL, faqQuestions } = await(await fetch('/JS/config.json')).json();
 const validCommands = [
     {
         name: "cd",
@@ -33,16 +32,97 @@ const validCommands = [
         example: "clear"
     }
 ];
-let currentPath = "home/games";
+let validDirs = {
+    home: {
+        name: "home",
+        games: {
+            name: "games",
+            TicTacToe: {
+                name: "TicTacToe.out",
+                type: "exec"
+            },
+            Connect4: {
+                name: "Connect4.out",
+                type: "exec"
+            },
+            MatchMemory: {
+                name: "MatchMemory.out",
+                type: "exec"
+            },
+            type: "directory"
+        },
+        IlIlIlIl: {
+            name: "IlIlIlIl",
+            type: "directory"
+        },
+        type: "directory"
+
+    }
+};
+let currentPath = "home/IlIlIlIl";
 let inGame = false;
 let currentGame = "";
 let controller;
+let secretCode = null;
+let eeId = null;
+let savedeeId = null;
+let terminalEEMultiplier = 1;
 window.addEventListener('load', async () => {
+    const cookies = document.cookie.split(" ").map((cookie, i) => {
+        return {
+            key: cookie.trim().split(";").join("").split("=")[0],
+            value: cookie.trim().split(";").join("").split("=")[1]
+        }
+    });
+    // Set terminal easter egg difficulty multiplier
+    const terminalEECookie = parseInt(cookies.find((c) => c.key === "terminalEE")?.value);
+    const terminalEECookie2 = parseInt(window.localStorage.getItem("terminalEE"));
+    const terminalEECookie3 = parseInt(window.sessionStorage.getItem("terminalEE"));
+    if (terminalEECookie || terminalEECookie2 || terminalEECookie3) {
+        let highestValue = 1;
+        if (isNaN(terminalEECookie) || isNaN(terminalEECookie2) || isNaN(terminalEECookie3)) {
+            // One was tampered with increase multiplier on all
+            const checkValues = [terminalEECookie, terminalEECookie2, terminalEECookie3];
+            for (let i = 0; i < 3; i++) {
+                if (checkValues[i] > highestValue) {
+                    highestValue = checkValues[i];
+                }
+            }
+            highestValue++;
+            document.cookie = "terminalEE=" + highestValue;
+            window.localStorage.setItem("terminalEE", highestValue);
+            window.sessionStorage.setItem("terminalEE", highestValue);
+        }
+        terminalEEMultiplier = highestValue;
+    } else {
+        // deleteAllCookies();
+        document.cookie = "terminalEE=1";
+        window.localStorage.setItem("terminalEE", 1);
+        window.sessionStorage.setItem("terminalEE", 1);
+    }
+    // Generate dir files for easter egg
+    const dirChars = ["I", "l"];
+    for (let i = 0; i < (terminalEEMultiplier * 3); i++) {
+        let dirName = "";
+        for (let x = 0; x < (terminalEEMultiplier * 8); x++) {
+            dirName += dirChars[getRandomInt(0, 1)];
+        }
+        validDirs["home"]["IlIlIlIl"][dirName] = {
+            name: `${dirName}.out`,
+            winner: false,
+            type: "exec"
+        };
+    };
+    // Assign winner file
+    const dirsLength = Object.keys(validDirs["home"]["IlIlIlIl"]).filter((d) => !["name", "type"].includes(d)).length
+    const winnerDir = Object.keys(validDirs["home"]["IlIlIlIl"]).filter((d) => !["name", "type"].includes(d))[getRandomInt(0, dirsLength - 1)];
+    validDirs["home"]["IlIlIlIl"][winnerDir]['winner'] = true;
+    // console.log(validDirs["home"]["IlIlIlIl"])
     // Listen for terminal input
     const input = document.getElementById('terminal-input-input');
     const output = document.getElementById('terminal-output');
     // Autofocus terminal
-    input.focus();
+    // input.focus();
     // Print out available commands
     const commandText = `<br>Available Commands:<br>${validCommands.map((command, i) => `<span class="terminalCommand">${command.name}</span>: ${command.description}<br>Example: ${command.example}`).join("<br><br>")}`
     output.innerHTML += commandText;
@@ -55,6 +135,503 @@ window.addEventListener('load', async () => {
             processCommand(input.value);
         }
     });
+    // Listen for code redeem
+    const codeBox = document.getElementById('redemption-box');
+    const codeInput = document.getElementById('redemption-box-input');
+    const codeButton = document.getElementById('redemption-box-button');
+    const nameBox = document.getElementById('name-box');
+    const nameInput = document.getElementById('name-box-input');
+    const nameButton = document.getElementById('name-box-button');
+    codeButton.addEventListener('click', async () => {
+        // Check if input is wrong
+        if (codeInput.value !== secretCode) {
+            return;
+        }
+        // save eeId
+        savedeeId = eeId;
+        codeBox.style.display = "none";
+        nameBox.style.display = "flex";
+    });
+    nameButton.addEventListener('click', async () => {
+        // Check if input is wrong
+        if (nameInput.value !== "") {
+            return;
+        }
+        const redeemReq = await fetch(`${config.apiURL}/coderedemption`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify({
+                name: nameInput.value,
+                eeId: savedeeId
+            })
+        });
+        const res = await req.json();
+        if (!res.success) {
+            alert("Error: " + res.error);
+        }
+        nameBox.style.display = "none";
+    });
+    const logoTopLeft = document.getElementById('logo-1');
+    const logoTopRight = document.getElementById('logo-2');
+    const logoBottomLeft = document.getElementById('logo-3');
+    const logoBottomRight = document.getElementById('logo-4');
+    const bodyElement = document.getElementById('body');
+    const code2Element = document.getElementById('code-2');
+    let showing = false;
+    logoTopLeft.addEventListener('click', () => {
+        if (secretCode == null) {
+            if (!showing) {
+                showing = true;
+                logoTopRight.style.display = "flex";
+                logoBottomLeft.style.display = "flex";
+                logoBottomRight.style.display = "flex";
+                codeBox.style.display = "flex";
+            } else {
+                showing = false;
+                logoTopRight.style.display = "none";
+                logoBottomLeft.style.display = "none";
+                logoBottomRight.style.display = "none";
+                codeBox.style.display = "none";
+            }
+        }
+    });
+    let lightMode = false;
+    logoTopRight.addEventListener('click', () => {
+        if (secretCode == null) {
+            if (!lightMode) {
+                bodyElement.style.backgroundColor = "var(--offwhite)";
+                lightMode = true;
+                code2Element.innerHTML = `Secret Code 2: ${getSecretCode(1)}`;
+
+            } else {
+                bodyElement.style.backgroundColor = "";
+                lightMode = false;
+                code2Element.innerHTML = "";
+                secretCode = null;
+                eeId = null;
+            }
+        }
+    });
+    logoBottomRight.addEventListener('click', () => {
+        if (secretCode == null) {
+            const code = getSecretCode(2).split("");
+            for (let i = 0; i < code.length; i++) {
+                const num = document.getElementById(`code-3-${i}`);
+                num.innerHTML = code[i];
+                setTimeout(() => {
+                    num.style.display = "block";
+                    setTimeout(() => {
+                        num.style.display = "";
+                    }, 10000);
+                }, 1500 * i);
+            }
+        }
+    });
+    logoBottomLeft.addEventListener('click', () => {
+        if (secretCode == null) {
+            document.title = `Code: ${getSecretCode(3)}`;
+            setTimeout(() => {
+                document.title = "eHacks 2025";
+            }, 60_000);
+        }
+    });
+    // Gallery
+    setInterval(() => {
+        changeImage(1);
+    }, 10_000);
+    // Get schedule data
+
+    const scheduleReq = await fetch(`${apiURL}/schedule`, {
+        method: "GET",
+        credentials: "include" // Important for session cookies
+    });
+    const scheduleRes = await scheduleReq.json();
+    if (scheduleRes.success) {
+        const events = scheduleRes.data.map((data, i) => {
+            const startTime = new Date(data.start.dateTime);
+            const endTime = new Date(data.end.dateTime);
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            return {
+                start: startTime.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+                end: endTime.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+                name: data.summary,
+                day: startTime.getDate(),
+                month: months[startTime.getMonth()],
+                dayOfWeek: daysOfWeek[startTime.getDay()],
+                startTimeStamp: startTime.valueOf(),
+                endTimeStamp: endTime.valueOf()
+            }
+        });
+        const eventList = document.getElementById('schedule-list');
+        let currentDay = null;
+        events.forEach((event) => {
+            if (currentDay !== event.day) {
+                currentDay = event.day;
+                // Generate day header
+                const dayHeader = document.createElement('h3');
+                dayHeader.className = "schedule-list-header";
+                const endingNum = parseInt(event.day.toString()[event.day.toString().split("").length - 1]);
+                dayHeader.innerHTML = `${event.month} ${event.day}${([1, 4, 5, 6, 7, 8, 9, 0].includes(endingNum)) ? "th" : (2 == endingNum) ? "nd" : "rd"}, ${event.dayOfWeek}`;
+                eventList.appendChild(dayHeader);
+            }
+            const item = document.createElement('li');
+            item.className = "schedule-list-item";
+            eventList.appendChild(item);
+            const itemHeader = document.createElement('p');
+            itemHeader.className = "schedule-list-item-header";
+            itemHeader.innerHTML = event.name;
+            item.appendChild(itemHeader);
+            const itemTime = document.createElement('p');
+            itemTime.className = "schedule-list-item-time";
+            itemTime.innerHTML = `${event.start} >> ${event.end}`;
+            item.appendChild(itemTime);
+            const nowTime = new Date().valueOf();
+            if (nowTime > event.startTimeStamp) {
+                const overlay = document.createElement('div');
+                overlay.className = "schedule-list-item-overlay";
+                const startEndDiff = event.endTimeStamp - event.startTimeStamp;
+                const timeSinceStart = nowTime - event.startTimeStamp;
+                const percent = timeSinceStart / startEndDiff * 100;
+                console.log(percent)
+                overlay.style.height = `${percent}%`;
+                item.appendChild(overlay);
+            }
+        });
+    }
+    // Create faq
+    const faqList = document.getElementById('faq-list');
+    let index = 0;
+    faqQuestions.forEach((faq) => {
+        const item = document.createElement('li');
+        item.className = "faq-list-item";
+        item.id = `faq-list-item-${index}`;
+        faqList.appendChild(item);
+        const faqText = document.createElement('p');
+        faqText.className = "faq-list-item-text";
+        faqText.innerHTML = `<span class=\"faq-list-item-text-question\">${faq.question}</span>`;
+        item.appendChild(faqText);
+        const arrow = document.createElement('img');
+        arrow.className = "faq-list-item-arrow";
+        arrow.src = "/Media/chevron-down-solid.svg";
+        arrow.alt = "See more info";
+        item.appendChild(arrow);
+        // Listen for click
+        let faqOpen = false;
+        let faqLock = false;
+        item.addEventListener('click', () => {
+            if (!faqLock) {
+                if (faqOpen) {
+                    faqLock = true;
+                    faqText.innerHTML = `<span class=\"faq-list-item-text-question\">${faq.question}</span>`;
+                    faqOpen = false;
+                    faqLock = false;
+                } else {
+                    faqLock = true;
+                    const answerSplit = faq.answer.split("");
+                    faqText.innerHTML += "<br><br>";
+                    for (let i = 0; i < answerSplit.length; i++) {
+                        setTimeout(() => {
+                            faqText.innerHTML += answerSplit[i];
+                            if (i === answerSplit.length - 1) {
+                                faqLock = false;
+                            }
+                        }, 5 * i);
+                    }
+                    faqOpen = true;
+                }
+            }
+        })
+        index++;
+    })
+    // background stuff
+    var canvas = document.querySelector(".hacker-3d-shiz"),
+        ctx = canvas.getContext("2d"),
+        canvasBars = document.querySelector(".bars-and-stuff"),
+        ctxBars = canvasBars.getContext("2d"),
+        outputConsole = document.querySelector(".output-console");
+
+    canvas.width = (window.innerWidth / 3) * 2;
+    canvas.height = window.innerHeight / 3;
+
+    canvasBars.width = window.innerWidth / 3;
+    canvasBars.height = canvas.height;
+
+    outputConsole.style.height = (window.innerHeight / 3) * 2 + 'px';
+    outputConsole.style.top = window.innerHeight / 3 + 'px'
+
+
+    /* Graphics stuff */
+    function Square(z) {
+        this.width = canvas.width / 2;
+
+        if (canvas.height < 200) {
+            this.width = 200;
+        };
+
+        this.height = canvas.height;
+        z = z || 0;
+
+        this.points = [
+            new Point({
+                x: (canvas.width / 2) - this.width,
+                y: (canvas.height / 2) - this.height,
+                z: z
+            }),
+            new Point({
+                x: (canvas.width / 2) + this.width,
+                y: (canvas.height / 2) - this.height,
+                z: z
+            }),
+            new Point({
+                x: (canvas.width / 2) + this.width,
+                y: (canvas.height / 2) + this.height,
+                z: z
+            }),
+            new Point({
+                x: (canvas.width / 2) - this.width,
+                y: (canvas.height / 2) + this.height,
+                z: z
+            })];
+        this.dist = 0;
+    }
+
+    Square.prototype.update = function () {
+        for (var p = 0; p < this.points.length; p++) {
+            this.points[p].rotateZ(0.001);
+            this.points[p].z -= 3;
+            if (this.points[p].z < -300) {
+                this.points[p].z = 2700;
+            }
+            this.points[p].map2D();
+        }
+    }
+
+    Square.prototype.render = function () {
+        ctx.beginPath();
+        ctx.moveTo(this.points[0].xPos, this.points[0].yPos);
+        for (var p = 1; p < this.points.length; p++) {
+            if (this.points[p].z > -(focal - 50)) {
+                ctx.lineTo(this.points[p].xPos, this.points[p].yPos);
+            }
+        }
+
+        ctx.closePath();
+        ctx.stroke();
+
+        this.dist = this.points[this.points.length - 1].z;
+
+    };
+
+    function Point(pos) {
+        this.x = pos.x - canvas.width / 2 || 0;
+        this.y = pos.y - canvas.height / 2 || 0;
+        this.z = pos.z || 0;
+
+        this.cX = 0;
+        this.cY = 0;
+        this.cZ = 0;
+
+        this.xPos = 0;
+        this.yPos = 0;
+        this.map2D();
+    }
+
+    Point.prototype.rotateZ = function (angleZ) {
+        var cosZ = Math.cos(angleZ),
+            sinZ = Math.sin(angleZ),
+            x1 = this.x * cosZ - this.y * sinZ,
+            y1 = this.y * cosZ + this.x * sinZ;
+
+        this.x = x1;
+        this.y = y1;
+    }
+
+    Point.prototype.map2D = function () {
+        var scaleX = focal / (focal + this.z + this.cZ),
+            scaleY = focal / (focal + this.z + this.cZ);
+
+        this.xPos = vpx + (this.cX + this.x) * scaleX;
+        this.yPos = vpy + (this.cY + this.y) * scaleY;
+    };
+
+    // Init graphics stuff
+    var squares = [],
+        focal = canvas.width / 2,
+        vpx = canvas.width / 2,
+        vpy = canvas.height / 2,
+        barVals = [],
+        sineVal = 0;
+
+    /* fake console stuff */
+    var commandStart = ['Performing DNS Lookups for',
+        'Searching ',
+        'Analyzing ',
+        'Estimating Approximate Location of ',
+        'Compressing ',
+        'Requesting Authorization From : ',
+        'wget -a -t ',
+        'tar -xzf ',
+        'Entering Location ',
+        'Compilation Started of ',
+        'Downloading '],
+        commandParts = ['Data Structure',
+            'http://wwjd.com?au&2',
+            'Texture',
+            'TPS Reports',
+            ' .... Searching ... ',
+            'http://zanb.se/?23&88&far=2',
+            'http://ab.ret45-33/?timing=1ww'],
+        commandResponses = ['Authorizing ',
+            'Authorized...',
+            'Access Granted..',
+            'Going Deeper....',
+            'Compression Complete.',
+            'Compilation of Data Structures Complete..',
+            'Entering Security Console...',
+            'Encryption Unsuccesful Attempting Retry...',
+            'Waiting for response...',
+            '....Searching...',
+            'Calculating Space Requirements '
+        ],
+        isProcessing = false,
+        processTime = 0,
+        lastProcess = 0;
+
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        squares.sort(function (a, b) {
+            return b.dist - a.dist;
+        });
+        for (var i = 0, len = squares.length; i < len; i++) {
+            squares[i].update();
+            squares[i].render();
+        }
+
+        ctxBars.clearRect(0, 0, canvasBars.width, canvasBars.height);
+
+        ctxBars.beginPath();
+        var y = canvasBars.height / 6;
+        ctxBars.moveTo(0, y);
+
+        for (i = 0; i < canvasBars.width; i++) {
+            var ran = (Math.random() * 20) - 10;
+            if (Math.random() > 0.98) {
+                ran = (Math.random() * 50) - 25
+            }
+            ctxBars.lineTo(i, y + ran);
+        }
+
+        ctxBars.stroke();
+
+        for (i = 0; i < canvasBars.width; i += 20) {
+            if (!barVals[i]) {
+                barVals[i] = {
+                    val: Math.random() * (canvasBars.height / 2),
+                    freq: 0.1,
+                    sineVal: Math.random() * 100
+                };
+            }
+
+            barVals[i].sineVal += barVals[i].freq;
+            barVals[i].val += Math.sin(barVals[i].sineVal * Math.PI / 2) * 5;
+            ctxBars.fillRect(i + 5, canvasBars.height, 15, -barVals[i].val);
+        }
+
+        requestAnimationFrame(render);
+    }
+
+    function consoleOutput() {
+        var textEl = document.createElement('p');
+
+        if (isProcessing) {
+            textEl = document.createElement('span');
+            textEl.textContent += Math.random() + " ";
+            if (Date.now() > lastProcess + processTime) {
+                isProcessing = false;
+            }
+        } else {
+            var commandType = ~~(Math.random() * 4);
+            switch (commandType) {
+                case 0:
+                    textEl.textContent = commandStart[~~(Math.random() * commandStart.length)] + commandParts[~~(Math.random() * commandParts.length)];
+                    break;
+                case 3:
+                    isProcessing = true;
+                    processTime = ~~(Math.random() * 5000);
+                    lastProcess = Date.now();
+                default:
+                    textEl.textContent = commandResponses[~~(Math.random() * commandResponses.length)];
+                    break;
+            }
+        }
+
+        outputConsole.scrollTop = outputConsole.scrollHeight;
+        outputConsole.appendChild(textEl);
+
+        if (outputConsole.scrollHeight > window.innerHeight) {
+            var removeNodes = outputConsole.querySelectorAll('*');
+            for (var n = 0; n < ~~(removeNodes.length / 3); n++) {
+                outputConsole.removeChild(removeNodes[n]);
+            }
+        }
+
+        setTimeout(consoleOutput, ~~(Math.random() * 200));
+    }
+
+    setTimeout(function () {
+        canvas.width = (window.innerWidth / 3) * 2;
+        canvas.height = window.innerHeight / 3;
+
+        canvasBars.width = window.innerWidth / 3;
+        canvasBars.height = canvas.height;
+
+        outputConsole.style.height = (window.innerHeight / 3) * 2 + 'px';
+        outputConsole.style.top = window.innerHeight / 3 + 'px';
+
+        focal = canvas.width / 2;
+        vpx = canvas.width / 2;
+        vpy = canvas.height / 2;
+
+        for (var i = 0; i < 15; i++) {
+            squares.push(new Square(-300 + (i * 200)));
+        }
+
+        ctx.strokeStyle = ctxBars.strokeStyle = ctxBars.fillStyle = '#00FF00';
+
+        render();
+        consoleOutput();
+    }, 200);
+
+    window.addEventListener('resize', function () {
+        canvas.width = (window.innerWidth / 3) * 2;
+        canvas.height = window.innerHeight / 3;
+
+        canvasBars.width = window.innerWidth / 3;
+        canvasBars.height = canvas.height;
+
+        outputConsole.style.height = (window.innerHeight / 3) * 2 + 'px';
+        outputConsole.style.top = window.innerHeight / 3 + 'px';
+
+        focal = canvas.width / 2;
+        vpx = canvas.width / 2;
+        vpy = canvas.height / 2;
+        ctx.strokeStyle = ctxBars.strokeStyle = ctxBars.fillStyle = '#00FF00';
+    });
 });
 let prefix = "guest@eHacks2025:/" + currentPath;
 function processCommand(commandString = "") {
@@ -64,50 +641,15 @@ function processCommand(commandString = "") {
     const commandSplit = commandString.split(" ");
     const command = commandSplit[0];
     const args = commandSplit.slice(1);
-    if (!validCommands.find(c => c.name == command) && !["TicTacToe.out", "Connect4.out", "MatchMemory.out", "IIll.out", "IllI.out", "lllI.out"].includes(command) && inGame === false) {
+    if (commandString.toLowerCase() == "ssh admin") {
+        window.location.pathname = "/adminLogin.html";
+        return;
+    }
+    if (!validCommands.find(c => c.name == command) && !["TicTacToe.out", "Connect4.out", "MatchMemory.out"].concat(Object.keys(validDirs["home"]["IlIlIlIl"]).filter((d) => !["name", "type"].includes(d)).map((v, i) => v + ".out")).includes(command) && inGame === false) {
         toConsole("Invalid command", true);
         input.value = "";
         return false;
     }
-    const validDirs = {
-        home: {
-            name: "home",
-            games: {
-                name: "games",
-                TicTacToe: {
-                    name: "TicTacToe.out",
-                    type: "exec"
-                },
-                Connect4: {
-                    name: "Connect4.out",
-                    type: "exec"
-                },
-                MatchMemory: {
-                    name: "MatchMemory.out",
-                    type: "exec"
-                },
-                type: "directory"
-            },
-            IlIlIlIl: {
-                name: "IlIlIlIl",
-                IIlllllI: {
-                    name: "IIlllllI.out",
-                    type: "exec"
-                },
-                IllIIIll: {
-                    name: "IllIIIll.out",
-                    type: "exec"
-                },
-                lllIIllI: {
-                    name: "lllIIllI.out",
-                    type: "exec"
-                },
-                type: "directory"
-            },
-            type: "directory"
-
-        }
-    };
 
     // process commands
     if (command == "clear") {
@@ -201,7 +743,7 @@ function processCommand(commandString = "") {
         const commandText = `Available Commands:<br>${validCommands.map((command, i) => `<span class="terminalCommand">${command.name}</span>: ${command.description}<br>Example: ${command.example}`).join("<br><br>")}`
         output.innerHTML += commandText;
         scrollToBottom();
-    } else if (["TicTacToe.out", "Connect4.out", "MatchMemory.out", "IIll.out", "IllI.out", "lllI.out"].includes(command) || inGame === true) {
+    } else if ((["TicTacToe.out", "Connect4.out", "MatchMemory.out"].concat(Object.keys(validDirs["home"]["IlIlIlIl"]).filter((d) => !["name", "type"].includes(d)).map((v, i) => v + ".out"))).includes(command) || inGame === true) {
         // Check if in games dir
         if (["TicTacToe.out", "Connect4.out", "MatchMemory.out"].includes(command) || inGame === true) {
             if (commandString === "exit") {
@@ -334,16 +876,24 @@ function processCommand(commandString = "") {
                     input.value = "";
                     return false;
                 }
-                const col = num % 3;
-                const row = Math.floor(num / 3);
+                const col = num % 6;
+                const row = Math.floor(num / 6);
                 // Check if spot taken already
                 if (controller.publicBoard[row][col] === "⬛⬛") {
                     toConsole(`There is no card in that spot.`, true);
                     input.value = "";
                     return false;
                 }
-                const oldTurnPlayer = controller.checkCard(col, row, controller.currentTurn);
-                output.innerHTML += `<br>${controller.printBoard()}`;
+                const oldTurnPlayer = controller.checkCard(row, col, controller.currentTurn);
+                output.innerHTML = `
+                    Welcome to eHacks 2025!
+                    <br>
+                    Here you can view info, register, manage your registration, and more.
+                    <br>
+                    There could be some interesting things to find within this page.
+                    <br>
+                `;
+                output.innerHTML += `<br><span class="terminalTitle">MatchMemory</span><br>${controller.printBoard()}`;
                 if (controller.checkForWin(oldTurnPlayer)) {
                     output.innerHTML += `${oldTurnPlayer.name} has won!`;
                     inGame = false;
@@ -353,26 +903,32 @@ function processCommand(commandString = "") {
                     input.value = "";
                     return;
                 }
-                if (controller.turnCount === 9) {
-                    output.innerHTML += `It ended in a tie!`;
-                    inGame = false;
-                    currentGame = "";
-                    controller = null;
-                    scrollToBottom();
-                    input.value = "";
-                    return;
-                }
+                // if (controller.turnCount === 9) {
+                //     output.innerHTML += `It ended in a tie!`;
+                //     inGame = false;
+                //     currentGame = "";
+                //     controller = null;
+                //     scrollToBottom();
+                //     input.value = "";
+                //     return;
+                // }
                 output.innerHTML += `${controller.currentTurn.name}\'s turn:`;
                 scrollToBottom();
             }
         } else {
-            // /home/IIII
-            if (command === "IIll.out") {
-
-            } else if (command === "IllI.out") {
-
-            } else if (command === "lllI.out") {
-
+            // /home/IlIlIlIl
+            const targetDir = validDirs["home"]["IlIlIlIl"][command.split(".")[0]];
+            if (!targetDir) {
+                toConsole("Invalid command", true);
+                input.value = "";
+                return false;
+            }
+            if (targetDir.winner) {
+                output.innerHTML += `<br>Your easter egg code: ${getSecretCode(0)}<br>You got 60s to enter this code into the redemption box before it resets!`;
+                input.value = "";
+            } else {
+                output.innerHTML += `<br>Better luck next time :p`;
+                input.value = "";
             }
         }
     }
@@ -564,10 +1120,10 @@ class MatchMemory {
         ["1️⃣9️⃣", "2️⃣0️⃣", "2️⃣1️⃣", "2️⃣2️⃣", "2️⃣3️⃣", "2️⃣4️⃣"]
     ];
     hiddenBoard = [
-        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
-        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
-        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
-        ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]
+        ["⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛"],
+        ["⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛"],
+        ["⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛"],
+        ["⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛", "⬛⬛"],
     ];
     currentTurn = this.player1;
     constructor(player1Name, player2Name) {
@@ -577,7 +1133,7 @@ class MatchMemory {
         for (let row = 0; row < this.hiddenBoard.length; row++) {
             for (let col = 0; col < this.hiddenBoard[row].length; col++) {
                 let randomNum = getRandomInt(0, this.possibleCards.length - 1);
-                this.hiddenBoard[row][col] = this.possibleCards[randomNum];
+                this.hiddenBoard[row][col] = this.possibleCards[randomNum] + this.possibleCards[randomNum];
                 this.possibleCards.splice(randomNum, 1);
             }
         }
@@ -586,7 +1142,7 @@ class MatchMemory {
 
     printBoard() {
         let text = "<br>";
-        text += `┃${this.publicBoard.map((v, i) => v.join("┃")).join("┃<br><br>┃")}┃<br><br>`;
+        text += `┃${this.publicBoard.map((v, i) => v.join("┃")).join("┃<br><br>┃")}┃<br><br>${controller.player1.name}: ${controller.player1.score}&nbsp;&nbsp;&nbsp;${controller.player2.name}: ${controller.player2.score}<br>`;
         // text += `┃${this.hiddenBoard.map((v, i) => v.join("┃")).join("┃<br>┃")}┃<br><br>`;
         return text;
     }
@@ -595,17 +1151,20 @@ class MatchMemory {
         // Check if card is held
         if (this.cardHeld !== null) {
             // Compare card held to other card
-            if (this.cardHeld === this.hiddenBoard[row][column]) {
+            if (this.cardHeld.name === this.hiddenBoard[row][column]) {
                 // Remove held card
-                this.hiddenBoard[this.cardHeld.row].splice([this.cardHeld.column], 1);
+                this.hiddenBoard[this.cardHeld.row][this.cardHeld.column] = "⬛⬛";
                 // Remove second card
-                this.hiddenBoard[row].splice([column], 1);
+                this.hiddenBoard[row][column] = "⬛⬛";
+                // Remove public cards
+                this.publicBoard[this.cardHeld.row][this.cardHeld.column] = "⬛⬛";
+                this.publicBoard[row][column] = "⬛⬛";
                 // Increase player score by 2
                 player.score += 2;
                 this.cardHeld = null
             } else {
                 // Hide card and remove card held
-                this.publicBoard[row][column] = this.placeHolder;
+                this.publicBoard[this.cardHeld.row][this.cardHeld.column] = this.placeHolder;
                 this.placeHolder = null;
                 this.cardHeld = null;
             }
@@ -619,25 +1178,61 @@ class MatchMemory {
             };
             // Show card in public board
             this.placeHolder = this.publicBoard[row][column];
-            this.publicBoard[row][column] = `⬛${this.hiddenBoard[row][column]}`;
+            this.publicBoard[row][column] = `${this.hiddenBoard[row][column]}`;
         }
         return player;
     }
 
     checkForWin(player) {
-        let count = 0;
-        for (let row of this.hiddenBoard) {
-            for (let col of row) {
-
-            }
-        }
-        if (this.hiddenBoard)
-            if (player.score > 12 || (player === this.player1) ? player > this.player2.score : player > this.player1.score) {
-                return true;
-            }
+        return player.score > 12 && (player === this.player1) ? player.score > this.player2.score : player.score > this.player1.score;
     }
 }
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function deleteAllCookies() {
+    document.cookie.split(';').forEach(cookie => {
+        const eqPos = cookie.indexOf('=');
+        const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    });
+}
+
+function getSecretCode(id) {
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+        code += getRandomInt(0, 9);
+    }
+    secretCode = code;
+    eeId = id;
+    setTimeout(() => {
+        // Reset code
+        secretCode = null;
+        eeId = null;
+        alert("Your code has expired!");
+    }, 60_000);
+    return code;
+}
+
+function randomizeText(element, delay = 50, duration = 2000) {
+    const originalText = element.dataset.text;
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let interval, timeout;
+    let currentText = originalText.split('').map(() => " ").join('');
+
+    function scramble() {
+        currentText = currentText.split('').map((char, i) =>
+            Math.random() > 0.3 ? characters[Math.floor(Math.random() * characters.length)] : originalText[i]
+        ).join('');
+        element.textContent = currentText;
+    }
+
+    interval = setInterval(scramble, delay);
+
+    timeout = setTimeout(() => {
+        clearInterval(interval);
+        element.textContent = originalText;
+    }, duration);
 }
 
