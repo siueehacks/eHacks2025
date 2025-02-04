@@ -32,8 +32,8 @@
     <section class="attendees">
         <h2 class="attendees-header">Attendees</h2>
         <div class="attendees-download-container">
-            <button class="attendees-download button" id="attendees-downloadPDF" onclick="">Download PDF</button>
-            <button class="attendees-download button" id="attendees-downloadCSV" onclick="">Download CSV</button>
+            <button class="attendees-download button" id="attendees-downloadCSV" onclick="downloadAttendees()">Download
+                CSV</button>
         </div>
         <div class="table-wrapper">
             <table class="table">
@@ -114,6 +114,37 @@
         <h2 class="shirts-header">Shirts</h2>
         <form class="shirt-form" id="shirt-form">
         </form>
+    </section>
+    <section class="eeCompletions">
+        <h2 class="eeCompletions-header">EE Completions</h2>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead class="table-header">
+                    <th>
+                        <div>
+                            Email
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Easter Egg
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Awarded
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            Action
+                        </div>
+                    </th>
+                </thead>
+                <tbody id="eeCompletions-table">
+                </tbody>
+            </table>
+        </div>
     </section>
     <div class="cover" id="cover"></div>
 </body>

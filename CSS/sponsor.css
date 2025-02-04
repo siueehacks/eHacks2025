@@ -58,3 +58,15 @@ td {
     box-shadow: -5px 5px 5px 0px var(--green);
     border: 1px solid var(--green);
 }
+
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 12px;
+    }
+
+    .back-button {
+        width: 30%;
+        left: 35%;
+        font-size: 12px;
+    }
+}

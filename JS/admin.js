@@ -1,3 +1,15 @@
+// Disable right-click (context menu)
+document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+});
+
+// Disable F12 key (Developer Tools)
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+        event.preventDefault();
+    }
+});
+
 const { apiURL } = await(await fetch('/JS/config.json')).json();
 
 
@@ -18,6 +30,7 @@ window.addEventListener('load', async (event) => {
     }
     const logoutButton = document.getElementById('logoutButton');
     const attendeeTable = document.getElementById('attendees-table');
+    const completionTable = document.getElementById('eeCompletions-table');
     const shirtForm = document.getElementById('shirt-form');
 
     logoutButton.addEventListener('click', async () => {
@@ -27,7 +40,7 @@ window.addEventListener('load', async (event) => {
         });
         const loginRes = await loginReq.json();
         if (!loginRes.success) {
-            alert(loginRes.reason);
+            alert(loginRes.error);
             return;
         }
         window.location.pathname = "/adminLogin.html";
@@ -39,7 +52,7 @@ window.addEventListener('load', async (event) => {
     });
     const attendeeRes = await attendeeReq.json();
     if (!attendeeRes.success) {
-        alert(attendeeRes.reason);
+        alert(attendeeRes.error);
         return;
     }
     for (let attendee of attendeeRes.attendees) {
@@ -83,7 +96,57 @@ window.addEventListener('load', async (event) => {
         transportImage.src = (attendee.needsTransport) ? "/Media/circle-check-solid.svg" : "/Media/circle-xmark-solid.svg";
         needsTransport.appendChild(transportImage);
     }
-
+    // Get eeCompletions
+    const eeReq = await fetch(`${apiURL}/admin/eecompletions`, {
+        method: "GET",
+        credentials: 'include'
+    });
+    const eeRes = await eeReq.json();
+    if (!eeRes.success) {
+        alert(eeRes.error);
+        return;
+    }
+    const completions = eeRes.eeCompletions;
+    // console.log(completions)
+    for (let completion of completions) {
+        const row = document.createElement('tr');
+        completionTable.appendChild(row);
+        const email = document.createElement('td');
+        email.innerHTML = completion.email;
+        row.appendChild(email);
+        const eeName = document.createElement('td');
+        eeName.innerHTML = completion.eeName;
+        row.appendChild(eeName);
+        const awarded = document.createElement('td');
+        const awardedImage = document.createElement('img');
+        awardedImage.className = (completion.awarded) ? "greenFilter" : "redFilter";
+        awardedImage.src = (completion.awarded) ? "/Media/circle-check-solid.svg" : "/Media/circle-xmark-solid.svg";
+        awarded.appendChild(awardedImage);
+        row.appendChild(awarded);
+        const actionButton = document.createElement('button');
+        actionButton.className = "button eeCompletions-button";
+        actionButton.innerHTML = (completion.awarded) ? "Take Award" : "Give Award";
+        row.appendChild(actionButton);
+        actionButton.addEventListener('click', async () => {
+            const actionReq = await fetch(`${apiURL}/admin/eecompletions/update`, {
+                method: "POST",
+                credentials: 'include',
+                mode: 'cors',
+                headers: { "Content-Type": 'application/json' },
+                body: JSON.stringify({
+                    userId: completion.userId,
+                    awarded: (completion.awarded) ? 0 : 1,
+                    eeId: completion.eeId
+                })
+            });
+            const actionRes = await actionReq.json();
+            if (!actionRes.success) {
+                alert(actionRes.error);
+                return;
+            }
+            window.location.reload();
+        });
+    }
     // Get shirts
     const shirtReq = await fetch(`${apiURL}/admin/shirts`, {
         method: "GET",
@@ -91,7 +154,7 @@ window.addEventListener('load', async (event) => {
     });
     const shirtRes = await shirtReq.json();
     if (!shirtRes.success) {
-        alert(shirtRes.reason);
+        alert(shirtRes.error);
         return;
     }
     for (let shirt of shirtRes.shirts) {
@@ -153,7 +216,7 @@ window.addEventListener('load', async (event) => {
         });
         const shortFormRes = await shortFormReq.json();
         if (!shortFormRes.success) {
-            alert(shortFormRes.reason);
+            alert(shortFormRes.error);
             return;
         }
         alert("Shirts stock has been updated!");

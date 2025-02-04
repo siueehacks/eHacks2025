@@ -67,3 +67,10 @@
     box-shadow: -5px 5px 5px 0px var(--green);
     border: 1px solid var(--green);
 }
+
+@media screen and (max-width: 500px) {
+    .loginForm {
+        width: 90%;
+        left: 5%;
+    }
+}

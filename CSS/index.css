@@ -36,7 +36,7 @@
 
 .terminal-header {
     position: relative;
-    height: 7%;
+    height: 30px;
     width: 100%;
     /* border: 2px solid red; */
     display: flex;
@@ -72,7 +72,7 @@
 .terminal-output {
     position: relative;
     width: 98%;
-    height: 83%;
+    height: calc(100% - 70px);
     color: var(--offwhite);
     padding-top: 1%;
     padding-left: 1%;
@@ -89,7 +89,7 @@
     display: flex;
     flex-direction: row;
     gap: 1%;
-    height: 7%;
+    height: 20px;
     width: 100%;
     align-items: center;
     padding-left: 1%;
@@ -98,6 +98,9 @@
 }
 
 .terminal-input-label {
+    position: relative;
+    width: min-content;
+    text-wrap: nowrap;
     color: var(--green);
 }
 
@@ -474,94 +477,64 @@
     cursor: default;
 }
 
-.sponsors-podium {
+.sponsors-leaderboard {
     position: relative;
-    display: flex;
-    flex-direction: row;
-    margin-top: 2%;
-    /* border: 2px solid blue; */
+    width: 80%;
+    left: 10%;
+    height: min-content;
 }
 
-.sponsors-podium-gold,
-.sponsors-podium-platinum,
-.sponsors-podium-silver {
+.sponsors-leaderboard-place {
     position: relative;
-    width: 33%;
-    height: 40vh;
+    min-height: 20vh;
+    height: min-content;
     display: flex;
     flex-direction: column;
-    /* border: 2px solid green; */
+    justify-content: center;
+    align-items: center;
+    margin-top: 4%;
+    border-radius: 10px;
+    gap: 10px;
+    /* border: 2px solid red; */
 }
 
-.sponsors-podium-image {
+.sponsors-leaderboard-place-image {
     position: relative;
-    width: 90%;
-    left: 5%;
-    margin-bottom: 1%;
+
+    /* height: 18vh; */
+    max-height: 18vh;
+    max-width: 90%;
     /* border: 2px solid blue; */
+}
+
+#sponsors-leaderboard-place-plat {
+    background-color: rgb(0, 217, 255, .2);
+    border: 2px solid #00d9ff;
+    box-shadow: 0px 0px 10px 2px #00d9ff;
+}
+
+#sponsors-leaderboard-place-gold {
+    background-color: rgba(255, 187, 0, 0.2);
+    border: 2px solid rgba(255, 187, 0);
+    box-shadow: 0px 0px 10px 2px rgba(255, 187, 0);
+}
+
+#sponsors-leaderboard-place-silver {
+    background-color: rgba(197, 197, 197, 0.2);
+    border: 2px solid rgb(197, 197, 197);
+    box-shadow: 0px 0px 10px 2px rgb(197, 197, 197);
 }
 
 #trex-logo {
-    width: 50%;
-    left: 25%;
     filter: contrast(140%) brightness(110%);
 }
 
 #an-logo {
-    top: 50%;
     filter: brightness(200%);
 }
 
 #oci-logo {
     filter: brightness(120%);
-}
-
-.sponsors-podium-gold-platform {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    top: 50%;
-    opacity: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #efbf04;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.sponsors-podium-platinum-platform {
-    position: absolute;
-    width: 100%;
-    height: 75%;
-    top: 25%;
-    opacity: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #d9d9d9;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.sponsors-podium-silver-platform {
-    position: absolute;
-    width: 100%;
-    height: 25%;
-    top: 75%;
-    opacity: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #c4c4c4;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.sponsors-podium-text {
-    position: relative;
-    font-size: 40px;
-    cursor: default;
 }
 
 .sponsor-extrainfo {
@@ -707,18 +680,20 @@
     position: relative;
     color: var(--offwhite);
     font-size: 15px;
-    width: 95%;
+    width: calc(100% - 45px);
     left: 2.5%;
     height: min-content;
     margin-top: 1%;
     margin-bottom: 1%;
     cursor: pointer;
+    /* border: 2px solid red; */
 }
 
 .faq-list-item-text-question {
     position: relative;
     color: var(--green);
     font-size: 20px;
+    /* border: 2px solid red; */
 }
 
 .faq-list-item-arrow {
@@ -762,9 +737,115 @@
     filter: invert(57%) sepia(53%) saturate(1995%) hue-rotate(69deg) brightness(93%) contrast(114%);
 }
 
+@media screen and (max-width: 900px) {
+    .attentionGetter-heading {
+        font-size: 50px;
+    }
+}
+
 @media screen and (max-width: 880px) {
     .terminal {
         width: 95%;
         margin-left: 2.5%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .attentionGetter {
+        width: 80%;
+        left: 10%;
+    }
+
+    .sponsors {
+        width: 80%;
+        left: 10%;
+    }
+
+    .sponsors-leaderboard {
+        width: 100%;
+        left: 0%;
+    }
+
+    .about {
+        width: 80%;
+        left: 10%;
+    }
+
+    .schedule {
+        width: 80%;
+        left: 10%;
+    }
+
+    .schedule-list-item {
+        width: 80%;
+        left: 10%;
+    }
+
+    .schedule-list-header {
+        width: 80%;
+        left: 10%;
+        /* border: 2px solid red; */
+    }
+
+    .faq-list-item-text-question {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .sponsors-leaderboard-place-image {
+        height: 16vh;
+    }
+
+    .schedule-list-item {
+        width: 100%;
+        left: 0%;
+    }
+
+    .schedule-list-item-header {
+        font-size: 25px;
+    }
+
+    .schedule-list-header {
+        width: 100%;
+        left: 0%;
+        /* border: 2px solid red; */
+    }
+
+    .attentionGetter {
+        width: 90%;
+        left: 5%;
+    }
+
+    .attentionGetter-heading {
+        font-size: 40px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .attentionGetter {
+        width: 90%;
+        left: 5%;
+    }
+
+    .attentionGetter-heading {
+        font-size: 40px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .schedule-list-item {
+        width: 100%;
+        left: 0%;
+    }
+
+    .schedule-list-item-header {
+        font-size: 25px;
+    }
+
+    .schedule-list-header {
+        width: 100%;
+        left: 0%;
+        /* border: 2px solid red; */
     }
 }

@@ -53,64 +53,10 @@ async function downloadResume(userId, fileName) {
         .catch(error => console.error('Error downloading document:', error));
 }
 
-async function downloadAttendees(fileType) {
+async function downloadAttendees() {
     const { apiURL } = await (await fetch('/JS/config.json')).json();
-    const attendeeReq = await fetch(`${apiURL}/admin/attendees`, {
-        method: "GET",
-        credentials: 'include'
-    });
-    const attendeeRes = await attendeeReq.json();
-    if (!attendeeRes.success) {
-        alert(attendeeRes.reason);
-        return;
-    }
-    const attendees = attendeeRes.attendees;
-    if (fileType === "csv") {
-        const fileName = `eHacks2025_Attendees.csv`
-        function escapeCSV(value) {
-            if (typeof value === 'string') {
-                // Escape double quotes and wrap in quotes if necessary
-                return `"${value.replace(/"/g, '""')}"`;
-            }
-            return value; // Leave other types as is
-        }
-
-        // Function to export table to CSV
-        async function exportToCSV(outputFile) {
-            try {
-                if (rows.length === 0) {
-                    console.log('No data found in the table.');
-                    return;
-                }
-
-                // Extract column names
-                const headers = Object.keys(rows[0]).join(',') + '\n';
-
-                // Convert rows to CSV format with proper escaping
-                const csvData = rows.map(row =>
-                    Object.values(row).map(escapeCSV).join(',')
-                ).join('\n');
-
-                // Write to file
-                fs.writeFileSync(outputFile, headers + csvData);
-                console.log(`CSV file saved as ${outputFile}`);
-
-                await connection.end();
-            } catch (error) {
-                console.error('Error exporting to CSV:', error.message);
-            }
-        }
-
-        // Example usage
-        const tableName = 'your_table';
-        const outputFile = path.join(__dirname, `${tableName}.csv`);
-
-        exportToCSV(tableName, outputFile);
-    } else {
-        const fileName = `eHacks2025_Attendees.pdf`
-
-    }
-    // window.location.href = `${apiURL}/admin/resume/${userId}`;
+    const downloadLink = `${apiURL}/admin/attendees/export`;
+    const fileName = `eHacks2025_Attendees.csv`;
     function downloadPDFFromBlob(blob, filename) {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob); // Create a Blob URL
@@ -122,7 +68,7 @@ async function downloadAttendees(fileType) {
     }
 
     // Fetching a PDF from a URL and downloading it as a Blob
-    fetch(pdfLink, { method: "GET", credentials: 'include' })
+    fetch(downloadLink, { method: "GET", credentials: 'include' })
         .then(response => response.blob()) // Get the PDF as a Blob
         .then(blob => downloadPDFFromBlob(blob, fileName))
         .catch(error => console.error('Error downloading document:', error));

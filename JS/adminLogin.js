@@ -1,3 +1,15 @@
+// Disable right-click (context menu)
+document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+});
+
+// Disable F12 key (Developer Tools)
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+        event.preventDefault();
+    }
+});
+
 const { apiURL } = await(await fetch('/JS/config.json')).json();
 
 

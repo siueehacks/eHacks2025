@@ -1,14 +1,14 @@
-// // Disable right-click (context menu)
-// document.addEventListener('contextmenu', function (event) {
-//     event.preventDefault();
-// });
+// Disable right-click (context menu)
+document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+});
 
-// // Disable F12 key (Developer Tools)
-// document.addEventListener('keydown', function (event) {
-//     if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
-//         event.preventDefault();
-//     }
-// });
+// Disable F12 key (Developer Tools)
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+        event.preventDefault();
+    }
+});
 const { apiURL, faqQuestions } = await(await fetch('/JS/config.json')).json();
 const validCommands = [
     {
@@ -59,7 +59,7 @@ let validDirs = {
 
     }
 };
-let currentPath = "home/IlIlIlIl";
+let currentPath = "home";
 let inGame = false;
 let currentGame = "";
 let controller;
@@ -141,7 +141,7 @@ window.addEventListener('load', async () => {
     const codeButton = document.getElementById('redemption-box-button');
     const nameBox = document.getElementById('name-box');
     const nameInput = document.getElementById('name-box-input');
-    const nameButton = document.getElementById('name-box-button');
+    const emailButton = document.getElementById('name-box-button');
     codeButton.addEventListener('click', async () => {
         // Check if input is wrong
         if (codeInput.value !== secretCode) {
@@ -152,24 +152,27 @@ window.addEventListener('load', async () => {
         codeBox.style.display = "none";
         nameBox.style.display = "flex";
     });
-    nameButton.addEventListener('click', async () => {
+    emailButton.addEventListener('click', async () => {
         // Check if input is wrong
-        if (nameInput.value !== "") {
+        if (nameInput.value == "") {
             return;
         }
-        const redeemReq = await fetch(`${config.apiURL}/coderedemption`, {
+        const redeemReq = await fetch(`${apiURL}/coderedemption`, {
             method: 'POST',
             mode: 'cors',
+            credentials: 'include',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify({
-                name: nameInput.value,
+                email: nameInput.value,
                 eeId: savedeeId
             })
         });
-        const res = await req.json();
-        if (!res.success) {
-            alert("Error: " + res.error);
+        const redeemRes = await redeemReq.json();
+        if (!redeemRes.success) {
+            alert(redeemRes.error);
+            return;
         }
+        alert("Come find the organizer Adam to claim your reward.");
         nameBox.style.display = "none";
     });
     const logoTopLeft = document.getElementById('logo-1');
@@ -202,7 +205,7 @@ window.addEventListener('load', async () => {
             if (!lightMode) {
                 bodyElement.style.backgroundColor = "var(--offwhite)";
                 lightMode = true;
-                code2Element.innerHTML = `Secret Code 2: ${getSecretCode(1)}`;
+                code2Element.innerHTML = `Secret Code 2: ${getSecretCode(2)}`;
 
             } else {
                 bodyElement.style.backgroundColor = "";
@@ -215,7 +218,7 @@ window.addEventListener('load', async () => {
     });
     logoBottomRight.addEventListener('click', () => {
         if (secretCode == null) {
-            const code = getSecretCode(2).split("");
+            const code = getSecretCode(3).split("");
             for (let i = 0; i < code.length; i++) {
                 const num = document.getElementById(`code-3-${i}`);
                 num.innerHTML = code[i];
@@ -230,7 +233,7 @@ window.addEventListener('load', async () => {
     });
     logoBottomLeft.addEventListener('click', () => {
         if (secretCode == null) {
-            document.title = `Code: ${getSecretCode(3)}`;
+            document.title = `Code: ${getSecretCode(4)}`;
             setTimeout(() => {
                 document.title = "eHacks 2025";
             }, 60_000);
@@ -305,7 +308,6 @@ window.addEventListener('load', async () => {
                 const startEndDiff = event.endTimeStamp - event.startTimeStamp;
                 const timeSinceStart = nowTime - event.startTimeStamp;
                 const percent = timeSinceStart / startEndDiff * 100;
-                console.log(percent)
                 overlay.style.height = `${percent}%`;
                 item.appendChild(overlay);
             }
@@ -334,11 +336,13 @@ window.addEventListener('load', async () => {
         item.addEventListener('click', () => {
             if (!faqLock) {
                 if (faqOpen) {
+                    arrow.style.transform = "rotate(0deg)";
                     faqLock = true;
                     faqText.innerHTML = `<span class=\"faq-list-item-text-question\">${faq.question}</span>`;
                     faqOpen = false;
                     faqLock = false;
                 } else {
+                    arrow.style.transform = "rotate(180deg)";
                     faqLock = true;
                     const answerSplit = faq.answer.split("");
                     faqText.innerHTML += "<br><br>";
@@ -924,7 +928,7 @@ function processCommand(commandString = "") {
                 return false;
             }
             if (targetDir.winner) {
-                output.innerHTML += `<br>Your easter egg code: ${getSecretCode(0)}<br>You got 60s to enter this code into the redemption box before it resets!`;
+                output.innerHTML += `<br>Your easter egg code: ${getSecretCode(1)}<br>You got 60s to enter this code into the redemption box before it resets!`;
                 input.value = "";
             } else {
                 output.innerHTML += `<br>Better luck next time :p`;
@@ -1137,7 +1141,6 @@ class MatchMemory {
                 this.possibleCards.splice(randomNum, 1);
             }
         }
-        console.log(this.hiddenBoard);
     }
 
     printBoard() {

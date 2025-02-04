@@ -41,6 +41,8 @@
     color: var(--green);
     font-size: 25px;
     margin-left: 2%;
+    width: min-content;
+    text-wrap: nowrap;
 }
 
 .section-right {
@@ -59,7 +61,8 @@
     box-shadow: 0px 0px 5px 0px var(--green);
 }
 
-.attendees {
+.attendees,
+.eeCompletions {
     position: relative;
     width: 90%;
     left: 5%;
@@ -74,14 +77,23 @@
     /* border: 2px solid red; */
 }
 
+.eeCompletions {
+    width: 46%;
+    left: 25%;
+    padding: 2%;
+    margin-top: 20px;
+}
+
 .attendees-header,
-.shirts-header {
+.shirts-header,
+.eeCompletions-header {
     position: relative;
     color: var(--green);
     font-size: 40px;
     width: 100%;
     text-align: center;
 }
+
 
 .table-wrapper {
     position: relative;
@@ -288,4 +300,47 @@
     transform: translate(2.5px, -2.5px);
     box-shadow: -5px 5px 5px 0px var(--green);
     border: 1px solid var(--green);
+}
+
+.eeCompletions-button {
+    text-wrap: nowrap;
+    padding: 2px;
+    margin: 1%;
+    color: var(--green);
+    background: none;
+}
+
+@media screen and (max-width: 600px) {
+
+    .attendees-header,
+    .shirts-header,
+    .eeCompletions-header {
+        font-size: 30px;
+    }
+
+    .shirts,
+    .shirt-form {
+        width: 90%;
+        left: 5%;
+    }
+
+    .eeCompletions {
+        width: 86%;
+        left: 5%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    /* .header-name {
+        font-size: 20px;
+    } */
+}
+
+@media screen and (max-width: 400px) {
+    .attendees-download-container {
+        position: relative;
+        top: 0%;
+        margin-bottom: 2%;
+        justify-content: center;
+    }
 }
