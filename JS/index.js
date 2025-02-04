@@ -68,6 +68,7 @@ let eeId = null;
 let savedeeId = null;
 let terminalEEMultiplier = 1;
 window.addEventListener('load', async () => {
+    // Get sessionID and save it to session Data
     const cookies = document.cookie.split(" ").map((cookie, i) => {
         return {
             key: cookie.trim().split(";").join("").split("=")[0],

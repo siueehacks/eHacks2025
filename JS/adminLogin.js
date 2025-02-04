@@ -5,7 +5,7 @@ document.addEventListener('contextmenu', function (event) {
 
 // Disable F12 key (Developer Tools)
 document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+    if (event.key === 'F12' || (event.key && (event.key.toLowerCase() === 'i' && event.ctrlKey || event.key?.toLowerCase() === "u" && event.ctrlKey))) {
         event.preventDefault();
     }
 });
@@ -30,7 +30,11 @@ window.addEventListener('load', async () => {
         });
         const loginRes = await loginReq.json();
         if (loginRes.success) {
+            sessionStorage.setItem("sessionId", loginRes.sessionId);
             window.location.pathname = "/admin.html";
+        } else {
+            alert(loginRes.error);
+            return;
         }
 
     });

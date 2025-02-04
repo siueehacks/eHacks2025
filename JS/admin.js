@@ -14,10 +14,13 @@ const { apiURL } = await(await fetch('/JS/config.json')).json();
 
 
 window.addEventListener('load', async (event) => {
-    event.preventDefault();
+    const sessionId = sessionStorage.getItem("sessionId");
+
     const loginReq = await fetch(`${apiURL}/admin/isloggedin`, {
         method: "GET",
-        credentials: 'include'
+        credentials: 'include',
+        mode: 'cors',
+        headers: { Authorization: `Bearer ${sessionId}` }
     });
     const loginRes = await loginReq.json();
     if (!loginRes.success) {
@@ -36,7 +39,9 @@ window.addEventListener('load', async (event) => {
     logoutButton.addEventListener('click', async () => {
         const loginReq = await fetch(`${apiURL}/admin/logout`, {
             method: "GET",
-            credentials: 'include'
+            credentials: 'include',
+            mode: 'cors',
+            headers: { Authorization: `Bearer ${sessionId}` }
         });
         const loginRes = await loginReq.json();
         if (!loginRes.success) {
@@ -48,7 +53,9 @@ window.addEventListener('load', async (event) => {
     // get attendees
     const attendeeReq = await fetch(`${apiURL}/admin/attendees`, {
         method: "GET",
-        credentials: 'include'
+        credentials: 'include',
+        mode: 'cors',
+        headers: { Authorization: `Bearer ${sessionId}` }
     });
     const attendeeRes = await attendeeReq.json();
     if (!attendeeRes.success) {
@@ -99,7 +106,9 @@ window.addEventListener('load', async (event) => {
     // Get eeCompletions
     const eeReq = await fetch(`${apiURL}/admin/eecompletions`, {
         method: "GET",
-        credentials: 'include'
+        credentials: 'include',
+        mode: 'cors',
+        headers: { Authorization: `Bearer ${sessionId}` }
     });
     const eeRes = await eeReq.json();
     if (!eeRes.success) {
@@ -132,7 +141,10 @@ window.addEventListener('load', async (event) => {
                 method: "POST",
                 credentials: 'include',
                 mode: 'cors',
-                headers: { "Content-Type": 'application/json' },
+                headers: {
+                    "Content-Type": 'application/json',
+                    Authorization: `Bearer ${sessionId}`
+                },
                 body: JSON.stringify({
                     userId: completion.userId,
                     awarded: (completion.awarded) ? 0 : 1,
@@ -150,7 +162,11 @@ window.addEventListener('load', async (event) => {
     // Get shirts
     const shirtReq = await fetch(`${apiURL}/admin/shirts`, {
         method: "GET",
-        credentials: 'include'
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+            Authorization: `Bearer ${sessionId}`
+        }
     });
     const shirtRes = await shirtReq.json();
     if (!shirtRes.success) {
@@ -186,7 +202,10 @@ window.addEventListener('load', async (event) => {
             method: "POST",
             credentials: 'include',
             mode: 'cors',
-            headers: { "Content-Type": 'application/json' },
+            headers: {
+                "Content-Type": 'application/json',
+                Authorization: `Bearer ${sessionId}`
+            },
             body: JSON.stringify(
                 {
                     shirts: [
