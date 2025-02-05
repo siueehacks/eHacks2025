@@ -1,15 +1,3 @@
-// Disable right-click (context menu)
-document.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-});
-
-// Disable F12 key (Developer Tools)
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
-        event.preventDefault();
-    }
-});
-const { apiURL, faqQuestions } = await(await fetch('/JS/config.json')).json();
 const validCommands = [
     {
         name: "cd",
@@ -68,6 +56,18 @@ let eeId = null;
 let savedeeId = null;
 let terminalEEMultiplier = 1;
 window.addEventListener('load', async () => {
+    // Disable right-click (context menu)
+    document.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+    });
+
+    // Disable F12 key (Developer Tools)
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+            event.preventDefault();
+        }
+    });
+    const { apiURL, faqQuestions } = await (await fetch('/JS/config.json')).json();
     // Get sessionID and save it to session Data
     const cookies = document.cookie.split(" ").map((cookie, i) => {
         return {
