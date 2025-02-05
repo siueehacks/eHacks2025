@@ -136,6 +136,13 @@ window.addEventListener('load', async () => {
             processCommand(input.value);
         }
     });
+    const commandButton = document.getElementById('terminal-input-input-button');
+    commandButton.addEventListener('click', () => {
+        if (input.value == "") {
+            return;
+        }
+        processCommand(input.value);
+    })
     // Listen for code redeem
     const codeBox = document.getElementById('redemption-box');
     const codeInput = document.getElementById('redemption-box-input');
