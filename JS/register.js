@@ -48,6 +48,9 @@ window.addEventListener('load', async () => {
         if (submitRes.success) {
             alert("Your registration/update was successful. You should have recieved an email confirming this action. You will now be taken back to the home page. Make sure to try and find the easter eggs within this website for a chance to win exclusive eHacks 2025 merch.");
             window.location.pathname = "/";
+        } else {
+            alert(submitRes.error);
+            return;
         }
     })
 });
