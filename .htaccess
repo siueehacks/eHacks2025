@@ -1,6 +1,4 @@
 RewriteEngine On
-AddType application/javascript .js
-
 # -----------------------------------------
 # Rule 1: Remove .html extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
