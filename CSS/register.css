@@ -111,6 +111,7 @@
     cursor: pointer;
     transition: all .2s ease-in-out;
     border: 1px solid #00000000;
+    text-wrap: nowrap;
     /* border: 2px solid blue; */
 }
 
@@ -143,4 +144,12 @@
     transform: translate(2.5px, -2.5px);
     box-shadow: -5px 5px 5px 0px var(--green);
     border: 1px solid var(--green);
+}
+
+.disclaimer {
+    position: relative;
+    color: var(--offwhite);
+    font-size: 15px;
+    width: 80%;
+    left: 10%;
 }
