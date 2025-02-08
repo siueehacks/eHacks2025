@@ -45,9 +45,9 @@ async function downloadResume(userId, fileName) {
         link.click(); // Trigger the download
         document.body.removeChild(link); // Clean up the DOM by removing the link
     }
-
+    const sessionId = sessionStorage.getItem("sessionId");
     // Fetching a PDF from a URL and downloading it as a Blob
-    fetch(pdfLink, { method: "GET", credentials: 'include' })
+    fetch(pdfLink, { method: "GET", credentials: 'include', headers: { Authorization: `Bearer ${sessionId}` } })
         .then(response => response.blob()) // Get the PDF as a Blob
         .then(blob => downloadPDFFromBlob(blob, fileName))
         .catch(error => console.error('Error downloading document:', error));
