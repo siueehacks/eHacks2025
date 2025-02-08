@@ -290,7 +290,6 @@
     background-color: var(--darkGray);
     width: min-content;
     text-wrap: nowrap;
-    padding: 1%;
     height: 30px;
     left: -5px;
     border: 1px solid #00000000;
