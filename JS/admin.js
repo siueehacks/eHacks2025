@@ -62,6 +62,8 @@ window.addEventListener('load', async (event) => {
         alert(attendeeRes.error);
         return;
     }
+    const attendeeHeader = document.getElementById('attendees-header');
+    attendeeHeader.innerHTML = `Attendees &#9;&#9;<span class="header-count">(Count: ${attendeeRes.attendees.length.toLocaleString()})</span>`
     for (let attendee of attendeeRes.attendees) {
         const row = document.createElement('tr');
         attendeeTable.appendChild(row);
@@ -117,6 +119,9 @@ window.addEventListener('load', async (event) => {
     }
     const completions = eeRes.eeCompletions;
     // console.log(completions)
+    const completionHeader = document.getElementById('eeCompletions-header');
+    completionHeader.innerHTML = `EE Completions &#9;&#9;<span class="header-count">(Count: ${completions.length.toLocaleString()})</span>`
+
     for (let completion of completions) {
         const row = document.createElement('tr');
         completionTable.appendChild(row);

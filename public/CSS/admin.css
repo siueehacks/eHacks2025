@@ -94,6 +94,10 @@
     text-align: center;
 }
 
+.header-count {
+    color: var(--offwhite);
+    font-size: 20px;
+}
 
 .table-wrapper {
     position: relative;
