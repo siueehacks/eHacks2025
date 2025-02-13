@@ -178,7 +178,7 @@
     border-bottom: none;
 }
 
-.table tbody tr:nth-child(2) {
+.table tbody tr:nth-child(odd) {
     background-color: #2a2a2a;
 }
 
