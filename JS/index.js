@@ -2,7 +2,7 @@ const validCommands = [
     {
         name: "cd",
         description: "Navigate to directory.",
-        example: "cd /games/TicTacToe"
+        example: "cd /games"
     },
     {
         name: "ls",
