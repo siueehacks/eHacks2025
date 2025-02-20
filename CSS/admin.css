@@ -94,6 +94,10 @@
     text-align: center;
 }
 
+.header-count {
+    color: var(--offwhite);
+    font-size: 20px;
+}
 
 .table-wrapper {
     position: relative;
@@ -178,7 +182,7 @@
     border-bottom: none;
 }
 
-.table tbody tr:nth-child(2) {
+.table tbody tr:nth-child(odd) {
     background-color: #2a2a2a;
 }
 
@@ -290,7 +294,6 @@
     background-color: var(--darkGray);
     width: min-content;
     text-wrap: nowrap;
-    padding: 1%;
     height: 30px;
     left: -5px;
     border: 1px solid #00000000;

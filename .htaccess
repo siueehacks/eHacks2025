@@ -1,5 +1,4 @@
 RewriteEngine On
-
 # -----------------------------------------
 # Rule 1: Remove .html extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -13,3 +12,4 @@ RewriteRule ^(.*)$ $1.html [L]
 RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_/]+)\.html[\s?] [NC]
 RewriteRule ^([a-zA-Z0-9_/]+)\.html$ /$1 [R=301,L]
 # -----------------------------------------
+

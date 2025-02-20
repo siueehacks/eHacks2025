@@ -1,18 +1,18 @@
-// Disable right-click (context menu)
-document.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-});
 
-// Disable F12 key (Developer Tools)
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
-        event.preventDefault();
-    }
-});
-
-const { apiURL } = await(await fetch('/JS/config.json')).json();
 
 window.addEventListener('load', async () => {
+    // Disable right-click (context menu)
+    document.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+    });
+
+    // Disable F12 key (Developer Tools)
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+            event.preventDefault();
+        }
+    });
+    const { apiURL } = await (await fetch('/JS/config.json')).json();
     const otherOption = document.getElementById('Other');
     const commentContainer = document.getElementById('comment-container');
     const commentText = document.getElementById('comment')
@@ -48,6 +48,9 @@ window.addEventListener('load', async () => {
         if (submitRes.success) {
             alert("Your registration/update was successful. You should have recieved an email confirming this action. You will now be taken back to the home page. Make sure to try and find the easter eggs within this website for a chance to win exclusive eHacks 2025 merch.");
             window.location.pathname = "/";
+        } else {
+            alert(submitRes.error);
+            return;
         }
     })
 });

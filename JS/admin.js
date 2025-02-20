@@ -1,19 +1,19 @@
-// Disable right-click (context menu)
-document.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-});
-
-// Disable F12 key (Developer Tools)
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
-        event.preventDefault();
-    }
-});
-
-const { apiURL } = await(await fetch('/JS/config.json')).json();
 
 
 window.addEventListener('load', async (event) => {
+    // Disable right-click (context menu)
+    document.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+    });
+
+    // Disable F12 key (Developer Tools)
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'F12' || event.key.toLowerCase() === 'i' && event.ctrlKey || event.key.toLowerCase() === "u" && event.ctrlKey) {
+            event.preventDefault();
+        }
+    });
+
+    const { apiURL } = await (await fetch('/JS/config.json')).json();
     const sessionId = sessionStorage.getItem("sessionId");
 
     const loginReq = await fetch(`${apiURL}/admin/isloggedin`, {
@@ -62,6 +62,8 @@ window.addEventListener('load', async (event) => {
         alert(attendeeRes.error);
         return;
     }
+    const attendeeHeader = document.getElementById('attendees-header');
+    attendeeHeader.innerHTML = `Attendees &#9;&#9;<span class="header-count">(Count: ${attendeeRes.attendees.length.toLocaleString()})</span>`
     for (let attendee of attendeeRes.attendees) {
         const row = document.createElement('tr');
         attendeeTable.appendChild(row);
@@ -117,6 +119,9 @@ window.addEventListener('load', async (event) => {
     }
     const completions = eeRes.eeCompletions;
     // console.log(completions)
+    const completionHeader = document.getElementById('eeCompletions-header');
+    completionHeader.innerHTML = `EE Completions &#9;&#9;<span class="header-count">(Count: ${completions.length.toLocaleString()})</span>`
+
     for (let completion of completions) {
         const row = document.createElement('tr');
         completionTable.appendChild(row);
